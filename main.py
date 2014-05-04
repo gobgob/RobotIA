@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 from math import *
 from class_robot import *
@@ -10,8 +10,8 @@ import threading
 from proxi2c import *
 
 table = Table();
-robot = Robot(table)
 proxy = Proxy_i2c()
+robot = Robot(table,proxy);
 
 strategyCalibration=StrategyCalibration(table,robot)
 

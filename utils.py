@@ -1,5 +1,6 @@
 
 from math import *
+import struct
 
 def ClosestEquivalentAngle(old_angle,new_angle):
 	if new_angle<=old_angle :
@@ -11,6 +12,13 @@ def ClosestEquivalentAngle(old_angle,new_angle):
 			new_angle-=2*pi
 		return new_angle;
 
+
+def split_double_32(x):
+	return split_integer_32(int(x*100000))
+
+def make_double_32(vals,offset):
+	return make_integer_32(vals,offset)/100000
+
 def split_integer_32(x):
 	splitted = []
 	splitted.append(0xFF&(x>>24))
@@ -19,24 +27,28 @@ def split_integer_32(x):
 	splitted.append(0xFF&(x>>0))
 	return splitted;
 
+def split_uinteger_32(x):
+	return split_integer_32(x)
+
 def make_integer_32(vals,offset):
-	value=0
-	value+=vals[offset+0]<<24
-	value+=vals[offset+1]<<16
-	value+=vals[offset+2]<<8
-	value+=vals[offset+3]<<0
-	return value;
+	return struct.unpack('>i', bytes(vals[offset:offset+4]))[0]
 
 def split_integer_16(x):
 	splitted = []
-	splitted.append(0xFF&(x>>16))
 	splitted.append(0xFF&(x>>8))
 	splitted.append(0xFF&(x>>0))
 	return splitted;
 
 def split_integer_8(x):
 	splitted = []
-	splitted.append(0xFF&(x>>16))
-	splitted.append(0xFF&(x>>8))
 	splitted.append(0xFF&(x>>0))
 	return splitted;
+
+def make_integer_8(vals,offset):
+	return struct.unpack('>h', bytes(vals[offset:offset+1]))[0]
+
+def make_bool_8(vals,offset):
+	return struct.unpack('>?', bytes(vals[offset:offset+1]))[0]
+
+def split_bool_8(x):
+	return split_integer_8(x)

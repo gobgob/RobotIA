@@ -1,5 +1,4 @@
 import time
-from time import *
 from math import *
 from utils import *
 from class_exceptions import *
@@ -40,7 +39,7 @@ class Robot:
 #Mouvements#
 
 	def moveForward(self,dist,noWait=False):
-		print ("moveForward " +str(dist))
+		print ("moveForward " +str(dist) + " noWait="+str(noWait))
 		self.proxy.move(dist,True)
 		self.waitForEvent(noWait=noWait)
 
@@ -63,7 +62,7 @@ class Robot:
 			self.waitForEvent(True,timeout=4);
 
 	def rotate(self,angle,autocolor=False,noWait=False):
-		print ("rotate " +str(angle))
+		print ("rotate " +str(angle)+ " noWait="+str(noWait))
 		if autocolor:
 			self.proxy.rotate(colorize_angle(angle),False)
 		else:
@@ -71,7 +70,7 @@ class Robot:
 		self.waitForEvent(True,timeout=4,noWait=noWait);
 
 	def rotateTo(self,angle,autocolor=False,noWait=False):
-		print ("rotate to " +str(angle))
+		print ("rotate to " +str(angle) + " noWait="+str(noWait))
 		if autocolor:
 			self.proxy.rotate(colorize_angle(angle),True)
 		else:
@@ -251,7 +250,7 @@ class Robot:
 
 		while True :
 			res,bfr,bfl,bbr,bbl,cmdhack = self.proxy.getStatus()
-			# print "res "+str(res)+" ack " + str(cmdhack);
+			print ("res "+str(res)+" ack " + str(cmdhack))
 			self.checkEndOfGame()
 			if self.isObstacleDetectionOn :
 				if self.checkObstacle():

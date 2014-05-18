@@ -14,6 +14,20 @@ class Proxy_i2c(GeneratedProxy_i2c):
 			print("I2c not supported");
 	
 
+	def checkChecksum(self,vals):
+		checksum=0;
+		for val in vals[:-1]:
+			checksum^=val
+		return(checksum==vals[-1])
+
+	def readBlock(self,register,lenght):
+		vals=None;
+		while True:
+			vals=self.bus.read_i2c_block_data(self.address,self.i2c_registers['REG_GETTICKS'],9)
+			if self.checkChecksum(vals) :
+				break;
+		return vals;
+
 # @flag SET_ODO_X	1
 # @flag SET_ODO_Y	2
 # @flag SET_ODO_ANGLE	4
@@ -66,6 +80,11 @@ class Proxy_i2c(GeneratedProxy_i2c):
 # @type getter
 # @param uinteger 32 kp
 # @param uinteger 32 kd
+
+# @method getTicks
+# @type getter
+# @param integer 32 left
+# @param integer 32 right
 
 ## @method getUltrasounds
 ## @type getter

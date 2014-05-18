@@ -20,15 +20,10 @@ def make_double_32(vals,offset):
 	return make_integer_32(vals,offset)/100000
 
 def split_integer_32(x):
-	splitted = []
-	splitted.append(0xFF&(x>>24))
-	splitted.append(0xFF&(x>>16))
-	splitted.append(0xFF&(x>>8))
-	splitted.append(0xFF&(x>>0))
-	return splitted;
+	return struct.pack('>i', int(x))[:4]
 
 def split_uinteger_32(x):
-	return split_integer_32(x)
+	return struct.pack('>I', int(x))[:4]
 
 def make_integer_32(vals,offset):
 	return struct.unpack('>i', bytes(vals[offset:offset+4]))[0]

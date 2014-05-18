@@ -1,4 +1,5 @@
 import time
+from time import sleep
 from math import *
 from utils import *
 from class_exceptions import *
@@ -307,7 +308,7 @@ class Robot:
 		self.setRotCoeffs(512,102400)
 
 	def rotationHard(self):
-		self.setRotCoeffs(4096,102400)
+		self.setRotCoeffs(9000,200000)
 
 	def distanceSoft(self):
 		self.setDistCoeffs(0,5*1024)

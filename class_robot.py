@@ -8,6 +8,7 @@ from class_table import *
 from class_servo import *
 from class_arm import *
 from color import *
+import RPi.GPIO as GPIO
 
 class Robot:
 	"""The robot class !"""
@@ -40,6 +41,8 @@ class Robot:
 	def __init__(self,table,proxy):
 		self.proxy = proxy
 		self.table = table
+		GPIO.setmode(GPIO.BCM)
+		GPIO.setup(9, GPIO.IN) #jumper
 		leftArm=Arm(Servo(1,proxy),0,45,90)
 		rightArm=Arm(Servo(2,proxy),0,45,90)
 
@@ -193,6 +196,9 @@ class Robot:
 			res,right,left = self.proxy.getTicks()
 		return res,right,left
 
+	def setTicks(self,right,left):
+		self.proxy.setTicks(right,left)
+
 	def emergencyStop(self):
 		tmp = self.isObstacleDetectionOn
 		self.isObstacleDetectionOn=False
@@ -237,10 +243,7 @@ class Robot:
 		self.isObstacleDetectionOn=False
 
 	def isJumperIn(self):
-		while True:
-			r,j=self.proxy.getJumper()
-			if r==0:
-				return not j
+		return not GPIO.input(9)
 
 #evenement#
 

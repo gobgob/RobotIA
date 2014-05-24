@@ -5,6 +5,8 @@ from utils import *
 from class_exceptions import *
 from class_point import *
 from class_table import *
+from class_servo import *
+from class_arm import *
 from color import *
 
 class Robot:
@@ -32,10 +34,14 @@ class Robot:
 	KpLin=0
 	KdLin=0
 
+	leftArm=None
+	rightArm=None
 
 	def __init__(self,table,proxy):
 		self.proxy = proxy
 		self.table = table
+		leftArm=Arm(Servo(1,proxy),0,45,90)
+		rightArm=Arm(Servo(2,proxy),0,45,90)
 
 #Mouvements#
 

@@ -1,32 +1,54 @@
-import smbus
+from serial import *
 import time
-from proxi2c_generated import *
+from proxi_generated import *
 
-class Proxy_i2c(GeneratedProxy_i2c):
+# class Proxy_i2c(GeneratedProxy_i2c):
+class Proxy_serial(GeneratedProxy):
 	"""proxy i2c"""
+	bus=None
 
 	def __init__(self):
-		self.address = 0x42
-		try:
-			self.bus = smbus.SMBus(1)
-		except:
-			self.bus=None
-			print("I2c not supported");
+		# try:
+		# self.bus = Serial('/dev/ttyS0', 115200,timeout=0.1)
+		self.bus = Serial('/dev/ttyAMA0', 115200,timeout=0.1)
+		# except:
+		# 	self.bus=None
+		# 	print("I2c not supported");
 	
 
-	def checkChecksum(self,vals):
+	# in case vals is empty, we cath errors...
+	def checksum(self,vals):
 		checksum=0;
-		for val in vals[:-1]:
-			checksum^=val
-		return(checksum==vals[-1])
+		try:
+			for val in vals:
+				checksum^=(val)
+			return checksum
+		except:
+			return 0
+
+	def checkChecksum(self,vals):
+		try:
+			return (self.checksum(vals[:-1])==(vals[-1]))
+		except:
+			return False
 
 	def readBlock(self,register,lenght):
-		vals=None;
+		vals=None
 		while True:
-			vals=self.bus.read_i2c_block_data(self.address,self.i2c_registers['REG_GETTICKS'],9)
+			self.writeBlock(register,[])
+			vals=list(self.bus.read(lenght+1))
 			if self.checkChecksum(vals) :
 				break;
-		return vals;
+			print("retry")
+			time.sleep(1)
+		return vals
+
+	def writeBlock(self,register,vals):
+		lenght=len(vals)
+		data=[0xFF,register,lenght] + vals
+		checksum=self.checksum(data)
+		data=data+[checksum]
+		self.bus.write(bytes(data))
 
 # @flag SET_ODO_X	1
 # @flag SET_ODO_Y	2
@@ -86,14 +108,15 @@ class Proxy_i2c(GeneratedProxy_i2c):
 # @param integer 32 left
 # @param integer 32 right
 
+# @method setTicks
+# @type setter
+# @param integer 32 left
+# @param integer 32 right
+
 ## @method getUltrasounds
 ## @type getter
 ## @param integer 8 kp
 ## @param integer 32 dist
-
-## @method getJumper
-## @type getter
-## @param bool 8 dist
 
 # @method getStatus
 # @type getter
@@ -102,3 +125,19 @@ class Proxy_i2c(GeneratedProxy_i2c):
 # @param bool 8 bbr
 # @param bool 8 bbl
 # @param bool 8 cmdhack
+
+# @method setServo
+# @type setter
+# @param uinteger 8 number
+# @param uinteger 8 angle
+
+# @method ratatouille
+# @type setter
+# @param bool 8 run
+# @param uinteger 16 delay_ms
+
+# @method launchNet
+# @type setter
+# @param bool 8 left
+# @param bool 8 right
+# @param bool 8 reset

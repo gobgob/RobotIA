@@ -28,16 +28,14 @@ def split_uinteger_32(x):
 def make_integer_32(vals,offset):
 	return struct.unpack('>i', bytes(vals[offset:offset+4]))[0]
 
-def split_integer_16(x):
-	splitted = []
-	splitted.append(0xFF&(x>>8))
-	splitted.append(0xFF&(x>>0))
-	return splitted;
+# def split_integer_16(x):
+# 	splitted = []
+# 	splitted.append(0xFF&(x>>8))
+# 	splitted.append(0xFF&(x>>0))
+# 	return splitted;
 
 def split_integer_8(x):
-	splitted = []
-	splitted.append(0xFF&(x>>0))
-	return splitted;
+	return struct.pack('>b', int(x))[:1]
 
 def make_integer_8(vals,offset):
 	return struct.unpack('>h', bytes(vals[offset:offset+1]))[0]
@@ -46,4 +44,4 @@ def make_bool_8(vals,offset):
 	return struct.unpack('>?', bytes(vals[offset:offset+1]))[0]
 
 def split_bool_8(x):
-	return split_integer_8(x)
+	return struct.pack('>?', int(x))[:1]

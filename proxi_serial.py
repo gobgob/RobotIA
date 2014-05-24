@@ -57,7 +57,7 @@ class Proxy_serial(GeneratedProxy):
 # @method move
 # @type setter
 # @param uinteger 32 rel_dist
-# @param bool 8 sign
+# @param integer 8 sign
 
 # @method rotate
 # @type setter

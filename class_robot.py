@@ -50,25 +50,25 @@ class Robot:
 
 	def moveForward(self,dist,noWait=False):
 		print ("moveForward " +str(dist) + " noWait="+str(noWait))
-		self.proxy.move(dist,True)
+		self.proxy.move(dist,+1)
 		self.waitForEvent(noWait=noWait)
 
 	def moveBackward(self,dist,noWait=False):
 		print ("moveBackward " +str(dist))
-		self.proxy.move(dist,False)
+		self.proxy.move(dist,-1)
 		self.waitForEvent(noWait=noWait)
 
 	def moveForwardUntilblockage(self):
 		print ("moveForwardUntilblockage")
 		while not (self.blockageFrontRight and self.blockageFrontLeft):
-			self.proxy.move(1000,True)
+			self.proxy.move(1000,+1)
 			self.waitForEvent(True,timeout=4,noWait=noWait);
 
 	def moveBackwardUntilblockage(self):
 		print ("moveBackwardUntilblockage")
 		#todo kpdist high, rot low
 		while not (self.blockageBackLeft and self.blockageBackRight):
-			self.proxy.move(1000,False)
+			self.proxy.move(1000,-1)
 			self.waitForEvent(True,timeout=4);
 
 	def rotate(self,angle,autocolor=False,noWait=False):

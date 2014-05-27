@@ -5,28 +5,33 @@ from strategy import *
 class StrategyHomologation(Strategy):
 		
 	def run(self):
-		print ("Strategy depart")
-		robot=self.robot
-		table=self.table
+		try:
+			print ("StrategyHomologation")
+			robot=self.robot
+			table=self.table
 
-		# robot.distanceHard()
-		# robot.rotationHard()
+			robot.distanceHard()
+			robot.rotationHard()
 
-		# # robot.moveForward(195*4)
-		# robot.goto(195*4,0)
-		# robot.rotateTo(0)
+			robot.activateUltrasounds()
 
-		robot.rotationSoft()
-		robot.distanceSoft()
+			robot.goto(490,-785,(pi/180)*180) 	#j'avance puis regarde le mammouths
+			robot.launchBall(3)					#je tire 3 balles
+			robot.rotateTo((pi/180)*90)
+			robot.goto(490,-205,(pi/180)*180)	#j'avance vers les fresques et les regardes
+			robot.goto(190,-190,(pi/180)*180)	#je me rapproche de la fresque
+			robot.rotateTo((pi/180)*0)			#demi tour
 
+			robot.distanceSoft()
+			robot.rotationSoft()
 
-		while True:
-			print( robot.getTicks())
-			print( robot.getX())
-			print( robot.getAngle())
-			time.sleep(0.01)
+			robot.moveBackwardUntilblockage()	#et je recule
+			robot.setAngle(0)
+			robot.setX(0+robot.height/2)
+			
 
-		print(robot.getX())
-		print(robot.getY())
-		print(robot.getAngle())
-
+			robot.distanceHard()
+			robot.rotationHard()
+			robot.moveForward(100)
+		except Obstacle as e:
+			sleep(3)

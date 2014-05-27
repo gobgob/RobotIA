@@ -17,10 +17,11 @@ robot = Robot(table,proxy);
 StrategyHomologation=StrategyHomologation(robot)
 
 def match():
-	try:
-		StrategyHomologation.run();
-	except EndOfGame as e:
-		print("Fin des 90 sec")
+	while True:	
+		try:
+			StrategyHomologation.run();
+		except EndOfGame as e:
+			print("Fin des 90 sec")
 
 # def funny():
 # 	print("funny !")
@@ -34,9 +35,12 @@ robot.setTicks(0,0)
 robot.setX(0)
 robot.setY(0)
 robot.setAngle(0)
+robot.setX(490)
+robot.setY(-1400)
+robot.setAngle((pi/180)*90)
 
-while not robot.isJumperIn():
-	pass
+# while not robot.isJumperIn():
+# 	pass
 
 # print("The Jumper is in.")
 # sleep(1)
@@ -52,19 +56,19 @@ startTime=time.time()
 # threadMatch.start()
 match()
 
-while time.time() < startTime+10:
+while time.time() < startTime+80:
 	print ("remaining time :"+str((startTime+80)-time.time()))
 	sleep(1)
 
 
-while time.time() < startTime+10:
+while time.time() < startTime+80:
 	print ("remaining time :"+str((startTime+88)-time.time()))
 	sleep(1)
 
 robot.flag_endOfGame = True
 print ("End of game thread master")
 
-while time.time() < startTime+15:
+while time.time() < startTime+85:
 	sleep(1)
 threadFunny.start()
 

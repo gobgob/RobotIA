@@ -38,13 +38,21 @@ class Robot:
 	leftArm=None
 	rightArm=None
 
+
+	gpio_jumper=9
+	gpio_fan=7
+	gpio_wheel=10
+
 	def __init__(self,table,proxy):
 		self.proxy = proxy
 		self.table = table
 		GPIO.setmode(GPIO.BCM)
-		GPIO.setup(9, GPIO.IN) #jumper
+		GPIO.setup(self.gpio_jumper, GPIO.IN)
+		GPIO.setup(self.gpio_fan, GPIO.OUT)
+		GPIO.setup(self.gpio_wheel, GPIO.OUT)
 		leftArm=Arm(Servo(1,proxy),0,45,90)
 		rightArm=Arm(Servo(2,proxy),0,45,90)
+		self.setTickRatio(4798.0,513.720152489);
 
 #Mouvements#
 
@@ -71,13 +79,13 @@ class Robot:
 			self.proxy.move(1000,-1)
 			self.waitForEvent(True,timeout=4);
 
-	def rotate(self,angle,autocolor=False,noWait=False):
+	def rotate(self,angle,autocolor=False,noWait=False,timeout=4):
 		print ("rotate " +str(angle)+ " noWait="+str(noWait))
 		if autocolor:
 			self.proxy.rotate(colorize_angle(angle),False)
 		else:
 			self.proxy.rotate(angle,False)
-		self.waitForEvent(True,timeout=4,noWait=noWait);
+		self.waitForEvent(True,timeout=timeout,noWait=noWait);
 
 	def rotateTo(self,angle,autocolor=False,noWait=False):
 		print ("rotate to " +str(angle) + " noWait="+str(noWait))
@@ -230,11 +238,12 @@ class Robot:
 		else:
 			return False
 
+	def setTickRatio(self,new_ticks_per_meters,new_ticks_per_rads):
+		return self.proxy.setTickRatio(new_ticks_per_meters,new_ticks_per_rads)
+
 	def getUltrasounds(self):
-		while True:
-			r1,u1=self.proxy.getUltrasounds(1)
-			if r1==0:
-				return u1
+		res,dist=self.proxy.getUltrasounds()
+		return dist
 
 	def activateUltrasounds(self):
 		self.isObstacleDetectionOn=True
@@ -243,7 +252,27 @@ class Robot:
 		self.isObstacleDetectionOn=False
 
 	def isJumperIn(self):
-		return not GPIO.input(9)
+		return not GPIO.input(gpio_jumper)
+
+	def launchNet(self):
+		self.proxy.launchNet(True,True,False)
+		time.sleep(2)
+		self.proxy.launchNet(True,True,True)
+
+	def launchBall(self,count):
+		print("launchBalle !!!!")
+		GPIO.output(self.gpio_wheel, GPIO.HIGH)
+		time.sleep(1)
+		GPIO.output(self.gpio_fan, GPIO.HIGH)
+		time.sleep(1)
+		self.proxy.ratatouille(True,500);
+		time.sleep(1*count)
+		self.proxy.ratatouille(False,0);
+		time.sleep(1)
+		GPIO.output(self.gpio_fan, GPIO.LOW)
+		GPIO.output(self.gpio_wheel, GPIO.LOW)
+
+
 
 #evenement#
 
@@ -289,7 +318,7 @@ class Robot:
 	def checkObstacle(self):
 
 		distmin=2
-		distblock=10
+		distblock=20
 
 		self.checkEndOfGame()
 		# return False
@@ -305,28 +334,28 @@ class Robot:
 				x=self.x+(dist+self.height/2)*cos(self.angle)
 				y=self.y+(dist+self.height/2)*sin(self.angle)
 				obstacle=Point(x,y)
-				# if self.table.isInTable(obstacle) :
-				print ("Obstacle "+str(dist)+" "+str(x)+" "+str(y))
-				return True
+				if self.table.isInTable(obstacle) :
+					print ("Obstacle "+str(dist)+" "+str(x)+" "+str(y))
+					return True
 		return False
 
 	def rotationSoft(self):
 		self.setRotCoeffs(0,0)
 
 	def rotationMedium(self):
-		self.setRotCoeffs(512,102400)
+		self.setRotCoeffs(512,0)
 
 	def rotationHard(self):
-		self.setRotCoeffs(9000,200000)
+		self.setRotCoeffs(20000,0)
 
 	def distanceSoft(self):
-		self.setDistCoeffs(0,5*1024)
+		self.setDistCoeffs(40,0)
 
 	def distanceMedium(self):
-		self.setDistCoeffs(800,5*1024)
+		self.setDistCoeffs(800,0)
 
 	def distanceHard(self):
-		self.setDistCoeffs(1024,5*1024)
+		self.setDistCoeffs(9000,0)
 
 	def distanceVeryHard(self):
-		self.setDistCoeffs(5024,5*1024)
+		self.setDistCoeffs(5024,0)

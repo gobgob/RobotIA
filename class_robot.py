@@ -50,6 +50,8 @@ class Robot:
 		GPIO.setup(self.gpio_jumper, GPIO.IN)
 		GPIO.setup(self.gpio_fan, GPIO.OUT)
 		GPIO.setup(self.gpio_wheel, GPIO.OUT)
+		GPIO.output(self.gpio_fan, GPIO.LOW)
+		GPIO.output(self.gpio_wheel, GPIO.LOW)
 		leftArm=Arm(Servo(1,proxy),0,45,90)
 		rightArm=Arm(Servo(2,proxy),0,45,90)
 		self.setTickRatio(4798.0,513.720152489);
@@ -59,7 +61,7 @@ class Robot:
 	def moveForward(self,dist,noWait=False):
 		print ("moveForward " +str(dist) + " noWait="+str(noWait))
 		self.proxy.move(dist,+1)
-		self.waitForEvent(noWait=noWait)
+		self.waitForEvent(noWait=noWait,exceptOnUltrasouds=True)
 
 	def moveBackward(self,dist,noWait=False):
 		print ("moveBackward " +str(dist))
@@ -70,14 +72,14 @@ class Robot:
 		print ("moveForwardUntilblockage")
 		while not (self.blockageFrontRight and self.blockageFrontLeft):
 			self.proxy.move(1000,+1)
-			self.waitForEvent(True,timeout=4,noWait=noWait);
+			self.waitForEvent(returnOnBlock=True,timeout=4,noWait=noWait);
 
 	def moveBackwardUntilblockage(self):
 		print ("moveBackwardUntilblockage")
 		#todo kpdist high, rot low
 		while not (self.blockageBackLeft and self.blockageBackRight):
 			self.proxy.move(1000,-1)
-			self.waitForEvent(True,timeout=4);
+			self.waitForEvent(returnOnBlock=True,timeout=4);
 
 	def rotate(self,angle,autocolor=False,noWait=False,timeout=4):
 		print ("rotate " +str(angle)+ " noWait="+str(noWait))
@@ -85,15 +87,35 @@ class Robot:
 			self.proxy.rotate(colorize_angle(angle),False)
 		else:
 			self.proxy.rotate(angle,False)
-		self.waitForEvent(True,timeout=timeout,noWait=noWait);
+		self.waitForEvent(returnOnBlock=True,timeout=timeout,noWait=noWait);
 
 	def rotateTo(self,angle,autocolor=False,noWait=False):
 		print ("rotate to " +str(angle) + " noWait="+str(noWait))
+
 		if autocolor:
 			self.proxy.rotate(colorize_angle(angle),True)
 		else:
 			self.proxy.rotate(angle,True)
-		self.waitForEvent(True,timeout=4,noWait=noWait);
+		self.waitForEvent(returnOnBlock=True,timeout=4,noWait=noWait);
+
+
+	def gotoEx(self,x,y,delta_max): #handle US
+		count=0
+		while count<5 :
+			try:
+				self.proxy.goto(x,y,10)
+				if (self.waitForEvent(returnOnBlock=True,exceptOnUltrasouds=True)):
+					break
+				else:
+					print ("jammed")
+					count+=1
+					self.unblock()
+			except Obstacle as e:
+				count+=1
+				sleep(2)
+
+		if (count>=5):
+			raise Obstacle()
 
 	def goto(self,x,y,end_angle=None,autocolor=False):
 		print ("goto("+str(x)+","+str(y)+")")
@@ -109,16 +131,8 @@ class Robot:
 		if fabs(diff_angle)>pi/3 :
 			self.rotateTo(new_angle)
 
-		count=0
-		self.proxy.goto(x,y,10)
-		while not self.waitForEvent(returnOnBlock=True):
-			print ("jammed")
-			self.unblock()
-			self.proxy.goto(x,y,10)
-			count=count+1
-			if count==4:
-				break
-
+		self.gotoEx(x,y,10)
+		
 		if not end_angle is None:
 			self.rotateTo(end_angle,autocolor=autocolor)
 
@@ -252,7 +266,7 @@ class Robot:
 		self.isObstacleDetectionOn=False
 
 	def isJumperIn(self):
-		return not GPIO.input(gpio_jumper)
+		return not GPIO.input(self.gpio_jumper)
 
 	def launchNet(self):
 		self.proxy.launchNet(True,True,False)
@@ -262,10 +276,10 @@ class Robot:
 	def launchBall(self,count):
 		print("launchBalle !!!!")
 		GPIO.output(self.gpio_wheel, GPIO.HIGH)
-		time.sleep(1)
+		time.sleep(2)
 		GPIO.output(self.gpio_fan, GPIO.HIGH)
 		time.sleep(1)
-		self.proxy.ratatouille(True,500);
+		self.proxy.ratatouille(True,800);
 		time.sleep(1*count)
 		self.proxy.ratatouille(False,0);
 		time.sleep(1)
@@ -276,7 +290,7 @@ class Robot:
 
 #evenement#
 
-	def waitForEvent(self,returnOnBlock=False,timeout=0,noWait=False):
+	def waitForEvent(self,returnOnBlock=False,timeout=0,noWait=False,exceptOnUltrasouds=False):
 		
 		if noWait :
 			return True
@@ -289,10 +303,10 @@ class Robot:
 
 		while True :
 			res,bfr,bfl,bbr,bbl,cmdhack = self.proxy.getStatus()
-			print ("res "+str(res)+" ack " + str(cmdhack))
+			# print ("res "+str(res)+" ack " + str(cmdhack))
 			self.checkEndOfGame()
 			if self.isObstacleDetectionOn :
-				if self.checkObstacle():
+				if exceptOnUltrasouds and self.checkObstacle():
 					self.emergencyStop()
 					raise Obstacle()
 

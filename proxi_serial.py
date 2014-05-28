@@ -113,10 +113,9 @@ class Proxy_serial(GeneratedProxy):
 # @param integer 32 left
 # @param integer 32 right
 
-## @method getUltrasounds
-## @type getter
-## @param integer 8 kp
-## @param integer 32 dist
+# @method getUltrasounds
+# @type getter
+# @param integer 32 dist
 
 # @method getStatus
 # @type getter
@@ -134,10 +133,15 @@ class Proxy_serial(GeneratedProxy):
 # @method ratatouille
 # @type setter
 # @param bool 8 run
-# @param uinteger 16 delay_ms
+# @param uinteger 32 delay_ms
 
 # @method launchNet
 # @type setter
 # @param bool 8 left
 # @param bool 8 right
 # @param bool 8 reset
+
+# @method setTickRatio
+# @type setter
+# @param double 32 new_ticks_per_meters
+# @param double 32 new_ticks_per_rads

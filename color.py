@@ -1,5 +1,5 @@
-# color="RED"
-color="BLUE"
+color="RED"
+# color="BLUE"
 
 def colorize_y(y):
 	if color=="RED" :

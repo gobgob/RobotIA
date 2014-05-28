@@ -6,27 +6,38 @@ from class_table import *
 from strategy_calibration import *
 from strategy_depart import *
 from strategy_homologation import *
+from class_highway import *
 from time import sleep
 import threading
 from proxi_serial import *
 from math import *
+from class_point import *
 
 table = Table();
 proxy = Proxy_serial()
 robot = Robot(table,proxy);
 
+# highway = Highway()
+
+# pts1 = Point(490,1025)
+# pts2 = Point(502,728)
+# res1=highway.findRoute(pts1,pts2)
+# res=res1.points
+# print("dist= "+str(res1.dist))
+# for pt in res:
+# 	print(pt.name+" "+str(pt.x) + " "+str(pt.y))
+
 #define DEFAULT_TICK_PER_METERS (4798.0)
 #define DEFAULT_TICK_PER_RADS (515.678044375)
 
 
-robot.setTicks(0,0)
-robot.setX(0)
-robot.setY(0)
-robot.setAngle(0)
+# robot.setTicks(0,0)
+# robot.setX(0)
+# robot.setY(0)
+# robot.setAngle(0)
 
-robot.distanceSoft()
-robot.rotationSoft()
-
+# robot.distanceSoft()
+# robot.rotationSoft()
 
 robot.launchBall(3)
 

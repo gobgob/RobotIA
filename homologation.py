@@ -51,22 +51,30 @@ robot.setTicks(0,0)
 robot.setX(0)
 robot.setY(0)
 robot.setAngle(0)
-robot.setX(415)
+robot.setX(500)
 robot.setY(colorize_y(-1400))
 robot.setAngle(colorize_angle((pi/180)*90))
+
+
+
+robot.setBras(100,100)
+print("Waiting for Jumper")
 
 while not robot.isJumperIn():
 	pass
 
+robot.setBras(50,50)
 print("The Jumper is in.")
 sleep(1)
+
 
 while robot.isJumperIn():
 	pass
 
+robot.setBras(0,0)
 print("The Jumper is out.")
-sleep(1)
 
+# exit()
 
 startTime=time.time()
 threadMatch.start()

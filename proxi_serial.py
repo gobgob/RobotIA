@@ -145,3 +145,8 @@ class Proxy_serial(GeneratedProxy):
 # @type setter
 # @param double 32 new_ticks_per_meters
 # @param double 32 new_ticks_per_rads
+
+# @method setBras
+# @type setter
+# @param integer 8 left
+# @param integer 8 right

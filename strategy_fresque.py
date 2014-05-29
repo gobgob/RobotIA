@@ -13,7 +13,7 @@ class Fresque():
 
 class StrategyFresque(Strategy):
 
-	fresque=Fresque(155,-155)
+	fresque=Fresque(140,-150)
 	
 	def run(self):
 			print ("StrategyFresque")
@@ -29,13 +29,14 @@ class StrategyFresque(Strategy):
 				return True
 
 			robot.activateUltrasounds()
-			self.takeTheHighway(fresque.x+300,fresque.y)
+			# self.takeTheHighway(fresque.x+300,fresque.y)
 			robot.goto(fresque.x+300,fresque.y,(pi/180)*180,autocolor=True) 
 			robot.deactivateUltrasounds()
-			robot.goto(fresque.x+300,fresque.y,(pi/180)*0,autocolor=True) ##devant la fresque, regarde a l'opposé
-			
-			robot.distanceSoft()
-			robot.rotationSoft()
+			robot.goto(fresque.x+100,fresque.y,(pi/180)*0,autocolor=True) ##devant la fresque, regarde a l'opposé
+			robot.rotateTo(0)
+			sleep(0.5)
+			# robot.distanceSoft()
+			# robot.rotationSoft()
 			robot.moveBackwardUntilblockage()	#et je recule pour me recaler au passage
 			robot.setAngle(0)
 			robot.setX(0+robot.height/2)
@@ -43,8 +44,10 @@ class StrategyFresque(Strategy):
 			robot.rotationHard()
 			
 			robot.activateUltrasounds()
-			robot.moveForward(100)
-			robot.goto(fresque.x+300,fresque.y,(pi/180)*180,autocolor=True) 
+			sleep(0.5)
+			robot.moveForward(50)
+			sleep(0.5)
+			robot.goto(fresque.x+300,fresque.y,autocolor=True) 
 			robot.deactivateUltrasounds()
 
 			fresque.isDead=True

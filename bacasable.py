@@ -13,6 +13,9 @@ from proxi_serial import *
 from math import *
 from class_point import *
 
+
+import random
+
 table = Table();
 proxy = Proxy_serial()
 robot = Robot(table,proxy);
@@ -35,18 +38,40 @@ robot = Robot(table,proxy);
 # robot.setX(0)
 # robot.setY(0)
 # robot.setAngle(0)
-
+# robot.activateUltrasounds()
 # robot.distanceSoft()
 # robot.rotationSoft()
 
-robot.launchBall(3)
+# robot.distanceHard()
+# # robot.moveForward(1000)
+# robot.goto(1000,0)
+# sleep(0.5)
+# robot.goto(0,0)
+# sleep(0.5)
+# robot.rotate(2*3.14)
+# sleep(0.5)
+# robot.rotate(-2*3.14)
+
+# robot.launchBall(3)
+
+
+while True :
+	# robot.setBras(random.randint(1,100),random.randint(1,100))
+	t=time.time()
+	robot.setBras(
+		50+50*sin(2*3.14*t*0.7),
+		50+50*cos(2*3.14*t*0.7))
+	sleep(0.01)
+
 
 # robot.moveBackwardUntilblockage()
+
+
 # robot.emergencyStop()
 
-# while True :
-# 	print(robot.checkObstacle())
-# 	sleep(0.5)
+while True :
+	print(robot.getUltrasounds())
+	sleep(0.5)
 
 # while not robot.isJumperIn():
 # 	pass

@@ -13,7 +13,7 @@ class Mammouth():
 
 class StrategyMammouth(Strategy):
 
-	mammouths=[Mammouth(415,-730),Mammouth(415,730)]
+	mammouths=[Mammouth(600,-830),Mammouth(650,-830)]
 	
 
 
@@ -31,10 +31,13 @@ class StrategyMammouth(Strategy):
 				return True
 
 			robot.activateUltrasounds()
-			self.takeTheHighway(mammouth.x,mammouth.y)
+			# self.takeTheHighway(mammouth.x,mammouth.y)
 			robot.goto(mammouth.x,mammouth.y,(pi/180)*180,autocolor=True)
-			robot.launchBall(3)					#je tire 3 balles
+			robot.launchBall(6)					#je tire 3 balles
 			robot.deactivateUltrasounds()
+
+			# if number=1:
+			# 	robot.rotateTo((pi/180)*210,autocolor=True)
 			
 			mammouth.isDead=True
 			return True

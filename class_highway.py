@@ -15,13 +15,13 @@ class Highway():
 	points=CircularList(
 		[
 		Point(415,-1000,"A"),
-		Point(415,-750, "B"),
+		Point(415,-730, "B"),
 		Point(415,-500, "C"),
 		Point(415,-250, "D"),
 		Point(415,+000, "E"),
 		Point(415,+250, "F"),
 		Point(415,+500, "G"),
-		Point(415,+750, "H"),
+		Point(415,+730, "H"),
 		# Point(500,+1000,"I"),
 
 		Point(750, +1000,"J"),
@@ -29,13 +29,13 @@ class Highway():
 		Point(1250,+1000,"L"),
 		# Point(1500,+1000,"M"),
 
-		Point(1500,+750, "N"),
+		Point(1500,+730, "N"),
 		Point(1500,+500, "O"),
 		Point(1500,+250, "P"),
 		Point(1500,+000, "Q"),
 		Point(1500,-250, "R"),
 		Point(1500,-500, "S"),
-		Point(1500,-750, "T"),
+		Point(1500,-730, "T"),
 		# Point(1500,-1000,"U"),
 
 		Point(1500,-1000,"V"),

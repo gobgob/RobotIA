@@ -6,7 +6,7 @@ from class_exceptions import *
 from class_point import *
 from class_table import *
 from class_servo import *
-from class_arm import *
+# from class_arm import *
 from color import *
 import RPi.GPIO as GPIO
 
@@ -35,8 +35,8 @@ class Robot:
 	KpLin=0
 	KdLin=0
 
-	leftArm=None
-	rightArm=None
+	# leftArm=None
+	# rightArm=None
 
 
 	gpio_jumper=9
@@ -52,19 +52,24 @@ class Robot:
 		GPIO.setup(self.gpio_wheel, GPIO.OUT)
 		GPIO.output(self.gpio_fan, GPIO.LOW)
 		GPIO.output(self.gpio_wheel, GPIO.LOW)
-		leftArm=Arm(Servo(1,proxy),0,45,90)
-		rightArm=Arm(Servo(2,proxy),0,45,90)
+		# leftArm=Arm(Servo(1,proxy),0,45,90)
+		# rightArm=Arm(Servo(2,proxy),0,45,90)
 		self.setTickRatio(4798.0,513.720152489);
+
+	def setBras(self,left,right):
+		self.proxy.setBras(left,right)
 
 #Mouvements#
 
 	def moveForward(self,dist,noWait=False):
 		print ("moveForward " +str(dist) + " noWait="+str(noWait))
+		# sleep(0.5)
 		self.proxy.move(dist,+1)
 		self.waitForEvent(noWait=noWait,exceptOnUltrasouds=True)
 
 	def moveBackward(self,dist,noWait=False):
 		print ("moveBackward " +str(dist))
+		# sleep(0.5)
 		self.proxy.move(dist,-1)
 		self.waitForEvent(noWait=noWait)
 
@@ -76,13 +81,16 @@ class Robot:
 
 	def moveBackwardUntilblockage(self):
 		print ("moveBackwardUntilblockage")
+		# sleep(0.5)
 		#todo kpdist high, rot low
-		while not (self.blockageBackLeft and self.blockageBackRight):
-			self.proxy.move(1000,-1)
-			self.waitForEvent(returnOnBlock=True,timeout=4);
+		# while not (self.blockageBackLeft and self.blockageBackRight):
+		self.proxy.move(1000,-1)
+		self.waitForEvent(returnOnBlock=False,timeout=5);
+		self.proxy.move(0,1)
 
 	def rotate(self,angle,autocolor=False,noWait=False,timeout=4):
 		print ("rotate " +str(angle)+ " noWait="+str(noWait))
+		# sleep(0.5)
 		if autocolor:
 			self.proxy.rotate(colorize_angle(angle),False)
 		else:
@@ -91,6 +99,7 @@ class Robot:
 
 	def rotateTo(self,angle,autocolor=False,noWait=False):
 		print ("rotate to " +str(angle) + " noWait="+str(noWait))
+		# sleep(0.5)
 
 		if autocolor:
 			self.proxy.rotate(colorize_angle(angle),True)
@@ -100,9 +109,11 @@ class Robot:
 
 
 	def gotoEx(self,x,y,delta_max): #handle US
+		sleep(0.5)
 		count=0
 		while count<5 :
 			try:
+				sleep(0.5)
 				self.proxy.goto(x,y,10)
 				if (self.waitForEvent(returnOnBlock=True,exceptOnUltrasouds=True)):
 					break
@@ -112,7 +123,9 @@ class Robot:
 					self.unblock()
 			except Obstacle as e:
 				count+=1
+				self.setBras(100,100)
 				sleep(2)
+				self.setBras(0,0)
 
 		if (count>=5):
 			raise Obstacle()
@@ -134,6 +147,7 @@ class Robot:
 		self.gotoEx(x,y,10)
 		
 		if not end_angle is None:
+			sleep(0.5)
 			self.rotateTo(end_angle,autocolor=autocolor)
 
 		return True
@@ -280,7 +294,7 @@ class Robot:
 		GPIO.output(self.gpio_fan, GPIO.HIGH)
 		time.sleep(1)
 		self.proxy.ratatouille(True,800);
-		time.sleep(1*count)
+		time.sleep(2*count)
 		self.proxy.ratatouille(False,0);
 		time.sleep(1)
 		GPIO.output(self.gpio_fan, GPIO.LOW)
@@ -309,6 +323,7 @@ class Robot:
 				if exceptOnUltrasouds and self.checkObstacle():
 					self.emergencyStop()
 					raise Obstacle()
+					return True
 
 			if(timeout>0 and starttime+timeout<time.time()):
 				print ("!!! Timeout")
@@ -363,7 +378,7 @@ class Robot:
 		self.setRotCoeffs(20000,0)
 
 	def distanceSoft(self):
-		self.setDistCoeffs(40,0)
+		self.setDistCoeffs(100,0)
 
 	def distanceMedium(self):
 		self.setDistCoeffs(800,0)

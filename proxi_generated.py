@@ -20,6 +20,7 @@ class GeneratedProxy():
 		"REG_RATATOUILLE":15,
 		"REG_LAUNCHNET":16,
 		"REG_SETTICKRATIO":17,
+		"REG_SETBRAS":18,
 	}
 	
 	def move(self,rel_dist,sign):
@@ -136,5 +137,11 @@ class GeneratedProxy():
 		vals.extend(split_double_32(new_ticks_per_meters))
 		vals.extend(split_double_32(new_ticks_per_rads))
 		self.writeBlock(self.i2c_registers['REG_SETTICKRATIO'],vals)
+	
+	def setBras(self,left,right):
+		vals=[]
+		vals.extend(split_integer_8(left))
+		vals.extend(split_integer_8(right))
+		self.writeBlock(self.i2c_registers['REG_SETBRAS'],vals)
 	
 	

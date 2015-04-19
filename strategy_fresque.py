@@ -47,7 +47,7 @@ class StrategyFresque(Strategy):
 			sleep(0.5)
 			robot.moveForward(50)
 			sleep(0.5)
-			robot.goto(fresque.x+300,fresque.y,autocolor=True) 
+			robot.goto(fresque.x+100,fresque.y,autocolor=True) 
 			robot.deactivateUltrasounds()
 
 			fresque.isDead=True

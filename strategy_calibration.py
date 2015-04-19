@@ -64,7 +64,7 @@ class StrategyCalibration(Strategy):
 
 		robot=self.robot
 
-		robot.distanceMedium()
+		robot.distanceSoft()
 		robot.rotationSoft()
 		robot.setX(0)
 		robot.setY(0)

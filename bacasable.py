@@ -20,6 +20,14 @@ table = Table();
 proxy = Proxy_serial()
 robot = Robot(table,proxy);
 
+
+robot.distanceHard()
+robot.rotationHard()
+# while True:
+# 	robot.rotate(pi/20,timeout=300)
+# 	sleep(2);
+
+
 # highway = Highway()
 
 # pts1 = Point(490,1025)
@@ -38,12 +46,28 @@ robot = Robot(table,proxy);
 # robot.setX(0)
 # robot.setY(0)
 # robot.setAngle(0)
-# robot.activateUltrasounds()
-# robot.distanceSoft()
-# robot.rotationSoft()
 
+# robot.launchNet()
+# # robot.activateUltrasounds()
+# # robot.distanceSoft()
+# # robot.rotationSoft()
+
+# robot.rotationHard()
 # robot.distanceHard()
-# # robot.moveForward(1000)
+# # robot.rotate(40*pi,timeout=300)
+# # robot.moveForward(200)
+# # sleep(2)
+# robot.rotate(-2*pi)
+# sleep(0.5)
+# robot.moveForward(100)
+# sleep(0.5)
+# robot.rotate(-2*pi)
+# sleep(0.5)
+# robot.moveBackward(100)
+
+
+
+# robot.moveBackward(200)
 # robot.goto(1000,0)
 # sleep(0.5)
 # robot.goto(0,0)
@@ -52,7 +76,7 @@ robot = Robot(table,proxy);
 # sleep(0.5)
 # robot.rotate(-2*3.14)
 
-# robot.launchBall(3)
+# robot.launchBall(10)
 
 
 while True :
@@ -69,9 +93,9 @@ while True :
 
 # robot.emergencyStop()
 
-while True :
-	print(robot.getUltrasounds())
-	sleep(0.5)
+# while True :
+# 	print(robot.getUltrasounds())
+# 	sleep(0.5)
 
 # while not robot.isJumperIn():
 # 	pass

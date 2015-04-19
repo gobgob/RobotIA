@@ -3,11 +3,10 @@
 from math import *
 from class_robot import *
 from class_table import *
-from strategy_calibration import *
-from strategy_depart import *
-from strategy_homologation import *
 from strategy_mammouth import *
 from strategy_fresque import *
+from strategy_feu import *
+from strategy_filet import *
 from time import sleep
 import threading
 from proxi_serial import *
@@ -16,9 +15,10 @@ table = Table();
 proxy = Proxy_serial()
 robot = Robot(table,proxy);
 
-strategyHomologation=StrategyHomologation(robot)
 strategyMammouth=StrategyMammouth(robot)
 strategyFresque=StrategyFresque(robot)
+strategyFeu=StrategyFeu(robot)
+strategyFilet=StrategyFilet(robot)
 
 
 def doStrategy( fun, *args ):
@@ -30,13 +30,17 @@ def doStrategy( fun, *args ):
 def match():
 	while True:
 		try:
+			doStrategy(strategyFeu.run);
 			doStrategy(strategyMammouth.run,0);
 			doStrategy(strategyFresque.run);
-			doStrategy(strategyMammouth.run,1);
+			doStrategy(strategyFilet.run);
+			robot.checkEndOfGame()
 			sleep(1)
 			# strategyHomologation.run();
 		except EndOfGame as e:
+			robot.goto(0,-630,autocolor=True,rotateOnly=True)
 			print("Fin des 90 sec")
+			return
 
 def funny():
 	print("funny !")
@@ -63,7 +67,7 @@ print("Waiting for Jumper")
 while not robot.isJumperIn():
 	pass
 
-robot.setBras(50,50)
+robot.setBras(0,0)
 print("The Jumper is in.")
 sleep(1)
 
@@ -75,7 +79,8 @@ robot.setBras(0,0)
 print("The Jumper is out.")
 
 # exit()
-
+robot.moveForward(100)
+sleep(0.5)
 startTime=time.time()
 threadMatch.start()
 # match()

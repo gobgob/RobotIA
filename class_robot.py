@@ -54,7 +54,9 @@ class Robot:
 		GPIO.output(self.gpio_wheel, GPIO.LOW)
 		# leftArm=Arm(Servo(1,proxy),0,45,90)
 		# rightArm=Arm(Servo(2,proxy),0,45,90)
-		self.setTickRatio(4798.0,513.720152489);
+		# self.setTickRatio(4798.0,519.245);
+		self.setTickRatio(4798.0,515.0);#red
+		# self.setTickRatio(4798.0,512.0);#jaune
 
 	def setBras(self,left,right):
 		self.proxy.setBras(left,right)
@@ -88,7 +90,7 @@ class Robot:
 		self.waitForEvent(returnOnBlock=False,timeout=5);
 		self.proxy.move(0,1)
 
-	def rotate(self,angle,autocolor=False,noWait=False,timeout=4):
+	def rotate(self,angle,autocolor=False,noWait=False,timeout=10):
 		print ("rotate " +str(angle)+ " noWait="+str(noWait))
 		# sleep(0.5)
 		if autocolor:
@@ -105,10 +107,11 @@ class Robot:
 			self.proxy.rotate(colorize_angle(angle),True)
 		else:
 			self.proxy.rotate(angle,True)
-		self.waitForEvent(returnOnBlock=True,timeout=4,noWait=noWait);
+		self.waitForEvent(returnOnBlock=True,timeout=10,noWait=noWait);
 
 
 	def gotoEx(self,x,y,delta_max): #handle US
+		print ("gotoex("+str(x)+","+str(y)+")")
 		sleep(0.5)
 		count=0
 		while count<5 :
@@ -130,7 +133,7 @@ class Robot:
 		if (count>=5):
 			raise Obstacle()
 
-	def goto(self,x,y,end_angle=None,autocolor=False):
+	def goto(self,x,y,end_angle=None,autocolor=False,rotateOnly=False):
 		print ("goto("+str(x)+","+str(y)+")")
 
 		if autocolor:
@@ -141,10 +144,13 @@ class Robot:
 		new_angle = ClosestEquivalentAngle(self.angle,new_angle)
 		diff_angle = new_angle-self.angle
 
-		if fabs(diff_angle)>pi/3 :
+		if fabs(diff_angle)>pi/3 or rotateOnly:
+			sleep(0.5)
 			self.rotateTo(new_angle)
+			if rotateOnly:
+				return
 
-		self.gotoEx(x,y,10)
+		self.gotoEx(x,y,20)
 		
 		if not end_angle is None:
 			sleep(0.5)
@@ -153,37 +159,38 @@ class Robot:
 		return True
 
 	def unblock(self):
-		if (self.blockageFrontRight):
-			self.moveBackward(150,noWait=True)
-			sleep(0.5)
-			self.rotate(pi/8,noWait=True)
-			sleep(0.5)
-			self.moveForward(150,noWait=True)
-			sleep(0.5)
+		pass
+		# if (self.blockageFrontRight):
+		# 	self.moveBackward(150,noWait=True)
+		# 	sleep(0.5)
+		# 	self.rotate(pi/8,noWait=True)
+		# 	sleep(0.5)
+		# 	self.moveForward(150,noWait=True)
+		# 	sleep(0.5)
 
-		if (self.blockageFrontLeft):
-			self.moveBackward(100,noWait=True)
-			sleep(0.5)
-			self.rotate(-pi/8,noWait=True)
-			sleep(0.5)
-			self.moveForward(100,noWait=True)
-			sleep(0.5)
+		# if (self.blockageFrontLeft):
+		# 	self.moveBackward(100,noWait=True)
+		# 	sleep(0.5)
+		# 	self.rotate(-pi/8,noWait=True)
+		# 	sleep(0.5)
+		# 	self.moveForward(100,noWait=True)
+		# 	sleep(0.5)
 
-		if (self.blockageBackLeft):
-			self.moveForward(100,noWait=True)
-			sleep(0.5)
-			self.rotate(pi/8,noWait=True)
-			sleep(0.5)
-			self.moveBackward(100,noWait=True)
-			sleep(0.5)
+		# if (self.blockageBackLeft):
+		# 	self.moveForward(100,noWait=True)
+		# 	sleep(0.5)
+		# 	self.rotate(pi/8,noWait=True)
+		# 	sleep(0.5)
+		# 	self.moveBackward(100,noWait=True)
+		# 	sleep(0.5)
 
-		if (self.blockageBackRight):
-			self.moveForward(100,noWait=True)
-			sleep(0.5)
-			self.rotate(-pi/8,noWait=True)
-			sleep(0.5)
-			self.moveBackward(100,noWait=True)
-			sleep(0.5)
+		# if (self.blockageBackRight):
+		# 	self.moveForward(100,noWait=True)
+		# 	sleep(0.5)
+		# 	self.rotate(-pi/8,noWait=True)
+		# 	sleep(0.5)
+		# 	self.moveBackward(100,noWait=True)
+		# 	sleep(0.5)
 
 
 	def getPosition(self):
@@ -220,7 +227,7 @@ class Robot:
 		if autocolor:
 			y=colorize_angle(angle)	
 		self.proxy.setOdo(0,0,angle,4)
-		self.rotate(0)
+		self.rotate(0,timeout=1)
 
 	def getAngle(self):
 		self.getPosition()
@@ -290,13 +297,18 @@ class Robot:
 	def launchBall(self,count):
 		print("launchBalle !!!!")
 		GPIO.output(self.gpio_wheel, GPIO.HIGH)
-		time.sleep(2)
+		time.sleep(4)
 		GPIO.output(self.gpio_fan, GPIO.HIGH)
 		time.sleep(1)
 		self.proxy.ratatouille(True,800);
 		time.sleep(2*count)
 		self.proxy.ratatouille(False,0);
 		time.sleep(1)
+		self.proxy.ratatouille(True,400);
+		time.sleep(1*count)
+		self.proxy.ratatouille(False,0);
+		time.sleep(1)
+
 		GPIO.output(self.gpio_fan, GPIO.LOW)
 		GPIO.output(self.gpio_wheel, GPIO.LOW)
 
@@ -319,6 +331,11 @@ class Robot:
 			res,bfr,bfl,bbr,bbl,cmdhack = self.proxy.getStatus()
 			# print ("res "+str(res)+" ack " + str(cmdhack))
 			self.checkEndOfGame()
+
+			# self.getPosition()
+			# print("x "+str(self.x))
+			# print("y "+str(self.y))
+
 			if self.isObstacleDetectionOn :
 				if exceptOnUltrasouds and self.checkObstacle():
 					self.emergencyStop()
@@ -330,18 +347,19 @@ class Robot:
 				return True
 
 			if res==0:
-				self.blockageFrontRight=bfr
-				self.blockageFrontLeft=bfl
-				self.blockageBackRight=bbr
-				self.blockageBackLeft=bbl
-				if returnOnBlock and (bfr or bfl or bbr or bbl):
-					return False
+				# self.blockageFrontRight=bfr
+				# self.blockageFrontLeft=bfl
+				# self.blockageBackRight=bbr
+				# self.blockageBackLeft=bbl
+				# if returnOnBlock and (bfr or bfl or bbr or bbl):
+				# 	return False
 				if cmdhack:
 					return True
-			time.sleep(0.01);
+			time.sleep(0.02);
 
 	def checkEndOfGame(self):
 		if self.flag_endOfGame:
+			self.flag_endOfGame=False
 			raise EndOfGame()
 
 	def checkObstacle(self):
@@ -376,6 +394,11 @@ class Robot:
 
 	def rotationHard(self):
 		self.setRotCoeffs(20000,0)
+		# self.setRotCoeffs(1000,0)
+
+	def rotationVeryHard(self):
+		# self.setRotCoeffs(20000,0)
+		self.setRotCoeffs(20000,0)
 
 	def distanceSoft(self):
 		self.setDistCoeffs(100,0)
@@ -384,7 +407,9 @@ class Robot:
 		self.setDistCoeffs(800,0)
 
 	def distanceHard(self):
-		self.setDistCoeffs(9000,0)
+		#				 2147483648
+		self.setDistCoeffs(2000,0)
+		# self.setDistCoeffs(9000,0)
 
 	def distanceVeryHard(self):
-		self.setDistCoeffs(5024,0)
+		self.setDistCoeffs(90000,0)

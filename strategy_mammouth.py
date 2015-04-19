@@ -1,6 +1,8 @@
 from math import *
 from class_robot import *
 from strategy import *
+from color import *
+
 
 class Mammouth():
 	x=0
@@ -13,7 +15,7 @@ class Mammouth():
 
 class StrategyMammouth(Strategy):
 
-	mammouths=[Mammouth(600,-830),Mammouth(650,-830)]
+	mammouths=[Mammouth(650,-800),Mammouth(650,-930)]
 	
 
 
@@ -22,10 +24,16 @@ class StrategyMammouth(Strategy):
 			robot=self.robot
 			table=self.table
 
+
 			robot.distanceHard()
 			robot.rotationHard()
 
 			mammouth=self.mammouths[number]
+
+			if color=="RED" :
+				pass
+			else:
+				mammouth.y=mammouth.y+150
 
 			if mammouth.isDead :
 				return True
@@ -33,7 +41,7 @@ class StrategyMammouth(Strategy):
 			robot.activateUltrasounds()
 			# self.takeTheHighway(mammouth.x,mammouth.y)
 			robot.goto(mammouth.x,mammouth.y,(pi/180)*180,autocolor=True)
-			robot.launchBall(6)					#je tire 3 balles
+			robot.launchBall(10)					#je tire 3 balles
 			robot.deactivateUltrasounds()
 
 			# if number=1:

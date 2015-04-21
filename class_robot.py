@@ -48,15 +48,8 @@ class Robot:
 		self.table = table
 		GPIO.setmode(GPIO.BCM)
 		GPIO.setup(self.gpio_jumper, GPIO.IN)
-		GPIO.setup(self.gpio_fan, GPIO.OUT)
-		GPIO.setup(self.gpio_wheel, GPIO.OUT)
-		GPIO.output(self.gpio_fan, GPIO.LOW)
-		GPIO.output(self.gpio_wheel, GPIO.LOW)
 		# leftArm=Arm(Servo(1,proxy),0,45,90)
 		# rightArm=Arm(Servo(2,proxy),0,45,90)
-		# self.setTickRatio(4798.0,519.245);
-		self.setTickRatio(4798.0,515.0);#red
-		# self.setTickRatio(4798.0,512.0);#jaune
 
 	def setBras(self,left,right):
 		self.proxy.setBras(left,right)

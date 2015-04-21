@@ -50,6 +50,8 @@ class Robot:
 		GPIO.setup(self.gpio_jumper, GPIO.IN)
 		# leftArm=Arm(Servo(1,proxy),0,45,90)
 		# rightArm=Arm(Servo(2,proxy),0,45,90)
+		self.setTickRatio(25500,4456);
+
 
 	def setBras(self,left,right):
 		self.proxy.setBras(left,right)

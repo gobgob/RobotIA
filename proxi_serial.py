@@ -143,8 +143,8 @@ class Proxy_serial(GeneratedProxy):
 
 # @method setTickRatio
 # @type setter
-# @param double 32 new_ticks_per_meters
-# @param double 32 new_ticks_per_rads
+# @param uinteger 32 new_ticks_per_meters
+# @param uinteger 32 new_ticks_per_rads
 
 # @method setBras
 # @type setter

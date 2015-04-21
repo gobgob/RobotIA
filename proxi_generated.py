@@ -134,8 +134,8 @@ class GeneratedProxy():
 	
 	def setTickRatio(self,new_ticks_per_meters,new_ticks_per_rads):
 		vals=[]
-		vals.extend(split_double_32(new_ticks_per_meters))
-		vals.extend(split_double_32(new_ticks_per_rads))
+		vals.extend(split_uinteger_32(new_ticks_per_meters))
+		vals.extend(split_uinteger_32(new_ticks_per_rads))
 		self.writeBlock(self.i2c_registers['REG_SETTICKRATIO'],vals)
 	
 	def setBras(self,left,right):

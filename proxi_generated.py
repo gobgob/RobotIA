@@ -16,11 +16,9 @@ class GeneratedProxy():
 		"REG_SETTICKS":11,
 		"REG_GETULTRASOUNDS":12,
 		"REG_GETSTATUS":13,
-		"REG_SETSERVO":14,
-		"REG_RATATOUILLE":15,
-		"REG_LAUNCHNET":16,
-		"REG_SETTICKRATIO":17,
-		"REG_SETBRAS":18,
+		"REG_SETFRONTGRIP":14,
+		"REG_SETTICKRATIO":15,
+		"REG_SETBRAS":16,
 	}
 	
 	def move(self,rel_dist,sign):
@@ -113,24 +111,10 @@ class GeneratedProxy():
 		cmdhack=make_bool_8(vals,4)
 		return res,bfr,bfl,bbr,bbl,cmdhack
 	
-	def setServo(self,number,angle):
+	def setFrontGrip(self,angle):
 		vals=[]
-		vals.extend(split_uinteger_8(number))
-		vals.extend(split_uinteger_8(angle))
-		self.writeBlock(self.i2c_registers['REG_SETSERVO'],vals)
-	
-	def ratatouille(self,run,delay_ms):
-		vals=[]
-		vals.extend(split_bool_8(run))
-		vals.extend(split_uinteger_32(delay_ms))
-		self.writeBlock(self.i2c_registers['REG_RATATOUILLE'],vals)
-	
-	def launchNet(self,left,right,reset):
-		vals=[]
-		vals.extend(split_bool_8(left))
-		vals.extend(split_bool_8(right))
-		vals.extend(split_bool_8(reset))
-		self.writeBlock(self.i2c_registers['REG_LAUNCHNET'],vals)
+		vals.extend(split_integer_8(angle))
+		self.writeBlock(self.i2c_registers['REG_SETFRONTGRIP'],vals)
 	
 	def setTickRatio(self,new_ticks_per_meters,new_ticks_per_rads):
 		vals=[]

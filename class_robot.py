@@ -52,10 +52,16 @@ class Robot:
 		# rightArm=Arm(Servo(2,proxy),0,45,90)
 		self.setTickRatio(25500,4456);
 
-
 	def setBras(self,left,right):
 		self.proxy.setBras(left,right)
 
+	def openFrontGrip(self):
+		print("openFrontGrip")
+		self.proxy.setFrontGrip(2)
+
+	def closeFrontGrip(self):
+		print("closeFrontGrip")
+		self.proxy.setFrontGrip(100)
 #Mouvements#
 
 	def moveForward(self,dist,noWait=False):

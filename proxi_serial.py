@@ -125,21 +125,9 @@ class Proxy_serial(GeneratedProxy):
 # @param bool 8 bbl
 # @param bool 8 cmdhack
 
-# @method setServo
+# @method setFrontGrip
 # @type setter
-# @param uinteger 8 number
-# @param uinteger 8 angle
-
-# @method ratatouille
-# @type setter
-# @param bool 8 run
-# @param uinteger 32 delay_ms
-
-# @method launchNet
-# @type setter
-# @param bool 8 left
-# @param bool 8 right
-# @param bool 8 reset
+# @param integer 8 angle
 
 # @method setTickRatio
 # @type setter

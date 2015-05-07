@@ -125,16 +125,12 @@ class Proxy_serial(GeneratedProxy):
 # @param bool 8 bbl
 # @param bool 8 cmdhack
 
-# @method setFrontGrip
+# @method setServo
 # @type setter
+# @param integer 8 pin
 # @param integer 8 angle
 
 # @method setTickRatio
 # @type setter
 # @param uinteger 32 new_ticks_per_meters
 # @param uinteger 32 new_ticks_per_rads
-
-# @method setBras
-# @type setter
-# @param integer 8 left
-# @param integer 8 right

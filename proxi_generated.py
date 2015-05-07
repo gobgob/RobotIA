@@ -16,9 +16,8 @@ class GeneratedProxy():
 		"REG_SETTICKS":11,
 		"REG_GETULTRASOUNDS":12,
 		"REG_GETSTATUS":13,
-		"REG_SETFRONTGRIP":14,
+		"REG_SETSERVO":14,
 		"REG_SETTICKRATIO":15,
-		"REG_SETBRAS":16,
 	}
 	
 	def move(self,rel_dist,sign):
@@ -111,21 +110,16 @@ class GeneratedProxy():
 		cmdhack=make_bool_8(vals,4)
 		return res,bfr,bfl,bbr,bbl,cmdhack
 	
-	def setFrontGrip(self,angle):
+	def setServo(self,pin,angle):
 		vals=[]
+		vals.extend(split_integer_8(pin))
 		vals.extend(split_integer_8(angle))
-		self.writeBlock(self.i2c_registers['REG_SETFRONTGRIP'],vals)
+		self.writeBlock(self.i2c_registers['REG_SETSERVO'],vals)
 	
 	def setTickRatio(self,new_ticks_per_meters,new_ticks_per_rads):
 		vals=[]
 		vals.extend(split_uinteger_32(new_ticks_per_meters))
 		vals.extend(split_uinteger_32(new_ticks_per_rads))
 		self.writeBlock(self.i2c_registers['REG_SETTICKRATIO'],vals)
-	
-	def setBras(self,left,right):
-		vals=[]
-		vals.extend(split_integer_8(left))
-		vals.extend(split_integer_8(right))
-		self.writeBlock(self.i2c_registers['REG_SETBRAS'],vals)
 	
 	

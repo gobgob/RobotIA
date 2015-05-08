@@ -50,18 +50,18 @@ class Robot:
 		GPIO.setup(self.gpio_jumper, GPIO.IN)
 		# leftArm=Arm(Servo(1,proxy),0,45,90)
 		# rightArm=Arm(Servo(2,proxy),0,45,90)
-		self.setTickRatio(25500,4456);
+		self.setTickRatio(27600,3965);
 
-	def setBras(self,left,right):
-		self.proxy.setBras(left,right)
+
 
 	def openFrontGrip(self):
 		print("openFrontGrip")
-		self.proxy.setFrontGrip(2)
+		self.proxy.setServo(SERVO_FRONT_GRIP_PIN, SERVO_FRONT_GRIP_OPEN)
 
 	def closeFrontGrip(self):
 		print("closeFrontGrip")
-		self.proxy.setFrontGrip(100)
+		self.proxy.setServo(SERVO_FRONT_GRIP_PIN, SERVO_FRONT_GRIP_CLOSE)
+
 #Mouvements#
 
 	def moveForward(self,dist,noWait=False):
@@ -111,14 +111,14 @@ class Robot:
 		self.waitForEvent(returnOnBlock=True,timeout=10,noWait=noWait);
 
 
-	def gotoEx(self,x,y,delta_max): #handle US
+	def gotoEx(self,x,y,delta_max=10): #handle US
 		print ("gotoex("+str(x)+","+str(y)+")")
 		sleep(0.5)
 		count=0
 		while count<5 :
 			try:
 				sleep(0.5)
-				self.proxy.goto(x,y,10)
+				self.proxy.goto(x,y,delta_max)
 				if (self.waitForEvent(returnOnBlock=True,exceptOnUltrasouds=True)):
 					break
 				else:
@@ -151,7 +151,7 @@ class Robot:
 			if rotateOnly:
 				return
 
-		self.gotoEx(x,y,20)
+		self.gotoEx(x,y,15)
 		
 		if not end_angle is None:
 			sleep(0.5)
@@ -391,26 +391,22 @@ class Robot:
 		self.setRotCoeffs(0,0)
 
 	def rotationMedium(self):
-		self.setRotCoeffs(512,0)
+		self.setRotCoeffs(100,0)
 
 	def rotationHard(self):
-		self.setRotCoeffs(20000,0)
-		# self.setRotCoeffs(1000,0)
+		self.setRotCoeffs(150,10000)
 
 	def rotationVeryHard(self):
-		# self.setRotCoeffs(20000,0)
-		self.setRotCoeffs(20000,0)
+		self.setRotCoeffs(100,0)
 
 	def distanceSoft(self):
-		self.setDistCoeffs(100,0)
+		self.setDistCoeffs(80,0)
 
 	def distanceMedium(self):
-		self.setDistCoeffs(800,0)
+		self.setDistCoeffs(80,0)
 
 	def distanceHard(self):
-		#				 2147483648
-		self.setDistCoeffs(2000,0)
-		# self.setDistCoeffs(9000,0)
+		self.setDistCoeffs(80,0)
 
 	def distanceVeryHard(self):
-		self.setDistCoeffs(90000,0)
+		self.setDistCoeffs(120,0)

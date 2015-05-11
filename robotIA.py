@@ -1,25 +1,18 @@
 #!/usr/bin/python3
 
-from math import *
 from class_robot import *
 from class_table import *
-from strategy_mammouth import *
-from strategy_fresque import *
-from strategy_feu import *
-from strategy_filet import *
+from math import *
+from proxi_serial import *
+from strategy_start import *
 from time import sleep
 import threading
-from proxi_serial import *
 
 table = Table();
 proxy = Proxy_serial()
 robot = Robot(table,proxy);
 
-strategyMammouth=StrategyMammouth(robot)
-strategyFresque=StrategyFresque(robot)
-strategyFeu=StrategyFeu(robot)
-strategyFilet=StrategyFilet(robot)
-
+strategyStart=StrategyStart(robot)
 
 def doStrategy( fun, *args ):
 	try:
@@ -30,13 +23,9 @@ def doStrategy( fun, *args ):
 def match():
 	while True:
 		try:
-			doStrategy(strategyFeu.run);
-			doStrategy(strategyMammouth.run,0);
-			doStrategy(strategyFresque.run);
-			doStrategy(strategyFilet.run);
+			doStrategy(strategyStart.run);
 			robot.checkEndOfGame()
 			sleep(1)
-			# strategyHomologation.run();
 		except EndOfGame as e:
 			robot.goto(0,-630,autocolor=True,rotateOnly=True)
 			print("Fin des 90 sec")
@@ -44,9 +33,7 @@ def match():
 
 def funny():
 	print("funny !")
-	robot.launchNet()
 	exit()
-
 
 threadMatch = threading.Thread(None, match)
 threadFunny = threading.Thread(None, funny)
@@ -56,30 +43,35 @@ robot.setX(0)
 robot.setY(0)
 robot.setAngle(0)
 robot.setX(500)
-robot.setY(colorize_y(-1400))
-robot.setAngle(colorize_angle((pi/180)*90))
 
-
+# robot appuyé contre tasseau posé sur bordure salle de cinéma
+robot.setY(colorize_y(1500-400-90-30))
+#au milieu
+robot.setX(1000)
+#regarde vers l'autre coté de la table
+robot.setAngle(colorize_angle((pi/180)*(-90)))
 
 robot.setBras(100,100)
+robot.openFrontGrip()
+robot.openBackGrip()
+robot.closeBallGrip()
+
 print("Waiting for Jumper")
 
-while not robot.isJumperIn():
-	pass
+# while not robot.isJumperIn():
+# 	pass
 
 robot.setBras(0,0)
 print("The Jumper is in.")
 sleep(1)
 
 
-while robot.isJumperIn():
-	pass
+# while robot.isJumperIn():
+# 	pass
 
 robot.setBras(0,0)
 print("The Jumper is out.")
 
-# exit()
-robot.moveForward(100)
 sleep(0.5)
 startTime=time.time()
 threadMatch.start()

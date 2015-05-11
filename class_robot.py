@@ -5,10 +5,31 @@ from utils import *
 from class_exceptions import *
 from class_point import *
 from class_table import *
-from class_servo import *
-# from class_arm import *
 from color import *
 import RPi.GPIO as GPIO
+
+
+
+SERVO_FRONT_GRIP_PIN = 16
+SERVO_FRONT_GRIP_CLOSE = 90
+SERVO_FRONT_GRIP_OPEN = 0
+
+SERVO_BACK_GRIP_PIN = 21
+SERVO_BACK_GRIP_CLOSE = 170
+SERVO_BACK_GRIP_OPEN = 70
+
+SERVO_BALL_GRIP_PIN = 20
+SERVO_BALL_GRIP_CLOSE = 150
+SERVO_BALL_GRIP_OPEN = 30
+
+SERVO_LEFT_ARM_PIN  = 16
+SERVO_RIGHT_ARM_PIN = 17
+
+SERVO_LEFT_ARM_HIGH = 105
+SERVO_LEFT_ARM_LOW  = 45
+
+SERVO_RIGHT_ARM_HIGH = 75
+SERVO_RIGHT_ARM_LOW = 135
 
 class Robot:
 	"""The robot class !"""
@@ -48,11 +69,7 @@ class Robot:
 		self.table = table
 		GPIO.setmode(GPIO.BCM)
 		GPIO.setup(self.gpio_jumper, GPIO.IN)
-		# leftArm=Arm(Servo(1,proxy),0,45,90)
-		# rightArm=Arm(Servo(2,proxy),0,45,90)
-		self.setTickRatio(27600,3965);
-
-
+		self.setTickRatio(27800,4350);
 
 	def openFrontGrip(self):
 		print("openFrontGrip")
@@ -62,38 +79,55 @@ class Robot:
 		print("closeFrontGrip")
 		self.proxy.setServo(SERVO_FRONT_GRIP_PIN, SERVO_FRONT_GRIP_CLOSE)
 
+	def openBackGrip(self):
+		print("openBackGrip")
+		self.proxy.setServo(SERVO_BACK_GRIP_PIN, SERVO_BACK_GRIP_OPEN)
+
+	def closeBackGrip(self):
+		print("closeBackGrip")
+		self.proxy.setServo(SERVO_BACK_GRIP_PIN, SERVO_BACK_GRIP_CLOSE)
+
+	def openBallGrip(self):
+		print("openBallGrip")
+		self.proxy.setServo(SERVO_BALL_GRIP_PIN, SERVO_BALL_GRIP_OPEN)
+
+	def closeBallGrip(self):
+		print("closeBallGrip")
+		self.proxy.setServo(SERVO_BALL_GRIP_PIN, SERVO_BALL_GRIP_CLOSE)
+
+	def setBras(self, leftArm, rightArm):
+		leftArm = (SERVO_LEFT_ARM_LOW-SERVO_LEFT_ARM_HIGH)*100/180
+		rightArm = (SERVO_RIGHT_ARM_LOW-SERVO_RIGHT_ARM_HIGH)*100/180
+		self.proxy.setServo(SERVO_LEFT_ARM_PIN, leftArm)
+		self.proxy.setServo(SERVO_RIGHT_ARM_PIN, rightArm)
+
 #Mouvements#
 
 	def moveForward(self,dist,noWait=False):
 		print ("moveForward " +str(dist) + " noWait="+str(noWait))
-		# sleep(0.5)
 		self.proxy.move(dist,+1)
 		self.waitForEvent(noWait=noWait,exceptOnUltrasouds=True)
 
 	def moveBackward(self,dist,noWait=False):
 		print ("moveBackward " +str(dist))
-		# sleep(0.5)
 		self.proxy.move(dist,-1)
 		self.waitForEvent(noWait=noWait)
 
-	def moveForwardUntilblockage(self):
+	def moveForwardUntilblockage(self,noWait=False):
 		print ("moveForwardUntilblockage")
 		while not (self.blockageFrontRight and self.blockageFrontLeft):
 			self.proxy.move(1000,+1)
-			self.waitForEvent(returnOnBlock=True,timeout=4,noWait=noWait);
+			self.waitForEvent(returnOnBlock=True,timeout=4,noWait=noWait)
 
-	def moveBackwardUntilblockage(self):
+	def moveBackwardUntilblockage(self,noWait=False):
 		print ("moveBackwardUntilblockage")
-		# sleep(0.5)
-		#todo kpdist high, rot low
-		# while not (self.blockageBackLeft and self.blockageBackRight):
-		self.proxy.move(1000,-1)
-		self.waitForEvent(returnOnBlock=False,timeout=5);
-		self.proxy.move(0,1)
+		while not (self.blockageBackLeft and self.blockageBackRight):
+			self.proxy.move(1000,-1)
+			self.waitForEvent(returnOnBlock=True,timeout=4,noWait=noWait)
+			self.proxy.move(0,1)
 
 	def rotate(self,angle,autocolor=False,noWait=False,timeout=10):
-		print ("rotate " +str(angle)+ " noWait="+str(noWait))
-		# sleep(0.5)
+		print ("rotate " +str(angle)+ "("+str((angle/pi)*180)+")"+" noWait="+str(noWait))
 		if autocolor:
 			self.proxy.rotate(colorize_angle(angle),False)
 		else:
@@ -101,9 +135,7 @@ class Robot:
 		self.waitForEvent(returnOnBlock=True,timeout=timeout,noWait=noWait);
 
 	def rotateTo(self,angle,autocolor=False,noWait=False):
-		print ("rotate to " +str(angle) + " noWait="+str(noWait))
-		# sleep(0.5)
-
+		print ("rotateTo " +str(angle)+ "("+str((angle/pi)*180)+")"+" noWait="+str(noWait))
 		if autocolor:
 			self.proxy.rotate(colorize_angle(angle),True)
 		else:
@@ -113,11 +145,9 @@ class Robot:
 
 	def gotoEx(self,x,y,delta_max=10): #handle US
 		print ("gotoex("+str(x)+","+str(y)+")")
-		sleep(0.5)
 		count=0
 		while count<5 :
 			try:
-				sleep(0.5)
 				self.proxy.goto(x,y,delta_max)
 				if (self.waitForEvent(returnOnBlock=True,exceptOnUltrasouds=True)):
 					break
@@ -127,9 +157,9 @@ class Robot:
 					self.unblock()
 			except Obstacle as e:
 				count+=1
-				self.setBras(100,100)
-				sleep(2)
-				self.setBras(0,0)
+				# self.setBras(100,100)
+				# sleep(2)
+				# self.setBras(0,0)
 
 		if (count>=5):
 			raise Obstacle()
@@ -151,7 +181,7 @@ class Robot:
 			if rotateOnly:
 				return
 
-		self.gotoEx(x,y,15)
+		self.gotoEx(x,y,20)
 		
 		if not end_angle is None:
 			sleep(0.5)
@@ -160,6 +190,7 @@ class Robot:
 		return True
 
 	def unblock(self):
+		self.emergencyStop()
 		pass
 		# if (self.blockageFrontRight):
 		# 	self.moveBackward(150,noWait=True)
@@ -290,31 +321,6 @@ class Robot:
 	def isJumperIn(self):
 		return not GPIO.input(self.gpio_jumper)
 
-	def launchNet(self):
-		self.proxy.launchNet(True,True,False)
-		time.sleep(2)
-		self.proxy.launchNet(True,True,True)
-
-	def launchBall(self,count):
-		print("launchBalle !!!!")
-		GPIO.output(self.gpio_wheel, GPIO.HIGH)
-		time.sleep(4)
-		GPIO.output(self.gpio_fan, GPIO.HIGH)
-		time.sleep(1)
-		self.proxy.ratatouille(True,800);
-		time.sleep(2*count)
-		self.proxy.ratatouille(False,0);
-		time.sleep(1)
-		self.proxy.ratatouille(True,400);
-		time.sleep(1*count)
-		self.proxy.ratatouille(False,0);
-		time.sleep(1)
-
-		GPIO.output(self.gpio_fan, GPIO.LOW)
-		GPIO.output(self.gpio_wheel, GPIO.LOW)
-
-
-
 #evenement#
 
 	def waitForEvent(self,returnOnBlock=False,timeout=0,noWait=False,exceptOnUltrasouds=False):
@@ -330,7 +336,8 @@ class Robot:
 
 		while True :
 			res,bfr,bfl,bbr,bbl,cmdhack = self.proxy.getStatus()
-			# print ("res "+str(res)+" ack " + str(cmdhack))
+			print ("res "+str(res)+" ack " + str(cmdhack))
+			print ("bfr="+str(bfr)+" bfl="+str(bfl)+" bbr="+str(bbr)+" bbl="+str(bbl))
 			self.checkEndOfGame()
 
 			# self.getPosition()
@@ -348,12 +355,12 @@ class Robot:
 				return True
 
 			if res==0:
-				# self.blockageFrontRight=bfr
-				# self.blockageFrontLeft=bfl
-				# self.blockageBackRight=bbr
-				# self.blockageBackLeft=bbl
-				# if returnOnBlock and (bfr or bfl or bbr or bbl):
-				# 	return False
+				self.blockageFrontRight=bfr
+				self.blockageFrontLeft=bfl
+				self.blockageBackRight=bbr
+				self.blockageBackLeft=bbl
+				if returnOnBlock and (bfr or bfl or bbr or bbl):
+					return False
 				if cmdhack:
 					return True
 			time.sleep(0.02);
@@ -364,7 +371,6 @@ class Robot:
 			raise EndOfGame()
 
 	def checkObstacle(self):
-
 		distmin=2
 		distblock=20
 
@@ -400,13 +406,13 @@ class Robot:
 		self.setRotCoeffs(100,0)
 
 	def distanceSoft(self):
-		self.setDistCoeffs(80,0)
+		self.setDistCoeffs(50,0)
 
 	def distanceMedium(self):
-		self.setDistCoeffs(80,0)
+		self.setDistCoeffs(40,30000)
 
 	def distanceHard(self):
-		self.setDistCoeffs(80,0)
+		self.setDistCoeffs(100,10000)
 
 	def distanceVeryHard(self):
 		self.setDistCoeffs(120,0)

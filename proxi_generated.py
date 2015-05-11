@@ -18,6 +18,7 @@ class GeneratedProxy():
 		"REG_GETSTATUS":13,
 		"REG_SETSERVO":14,
 		"REG_SETTICKRATIO":15,
+		"REG_SETMAXSPEEDS":16,
 	}
 	
 	def move(self,rel_dist,sign):
@@ -112,8 +113,8 @@ class GeneratedProxy():
 	
 	def setServo(self,pin,angle):
 		vals=[]
-		vals.extend(split_integer_8(pin))
-		vals.extend(split_integer_8(angle))
+		vals.extend(split_integer_32(pin))
+		vals.extend(split_integer_32(angle))
 		self.writeBlock(self.i2c_registers['REG_SETSERVO'],vals)
 	
 	def setTickRatio(self,new_ticks_per_meters,new_ticks_per_rads):
@@ -121,5 +122,11 @@ class GeneratedProxy():
 		vals.extend(split_uinteger_32(new_ticks_per_meters))
 		vals.extend(split_uinteger_32(new_ticks_per_rads))
 		self.writeBlock(self.i2c_registers['REG_SETTICKRATIO'],vals)
+	
+	def setMaxSpeeds(self,new_rot_speed,new_dist_speed):
+		vals=[]
+		vals.extend(split_uinteger_32(new_rot_speed))
+		vals.extend(split_uinteger_32(new_dist_speed))
+		self.writeBlock(self.i2c_registers['REG_SETMAXSPEEDS'],vals)
 	
 	

@@ -127,10 +127,15 @@ class Proxy_serial(GeneratedProxy):
 
 # @method setServo
 # @type setter
-# @param integer 8 pin
-# @param integer 8 angle
+# @param integer 32 pin
+# @param integer 32 angle
 
 # @method setTickRatio
 # @type setter
 # @param uinteger 32 new_ticks_per_meters
 # @param uinteger 32 new_ticks_per_rads
+
+# @method setMaxSpeeds
+# @type setter
+# @param uinteger 32 new_rot_speed
+# @param uinteger 32 new_dist_speed

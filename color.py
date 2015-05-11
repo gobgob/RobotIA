@@ -1,14 +1,14 @@
-# color="RED"
-color="BLUE"
+color="GREEN"
+# color="YELLOW"
 
 def colorize_y(y):
-	if color=="RED" :
+	if color=="GREEN" :
 		return y
 	else:
 		return -y
 
 def colorize_angle(a):
-	if color=="RED" :
+	if color=="GREEN" :
 		return a
 	else:
 		return -a

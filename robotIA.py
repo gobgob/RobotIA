@@ -27,7 +27,7 @@ def match():
 			robot.checkEndOfGame()
 			sleep(1)
 		except EndOfGame as e:
-			robot.goto(0,-630,autocolor=True,rotateOnly=True)
+			# robot.goto(0,-630,autocolor=True,rotateOnly=True)
 			print("Fin des 90 sec")
 			return
 

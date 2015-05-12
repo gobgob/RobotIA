@@ -12,20 +12,18 @@ table = Table();
 proxy = Proxy_serial()
 robot = Robot(table,proxy);
 
-#define DEFAULT_TICK_PER_METERS (4798.0)
-#define DEFAULT_TICK_PER_RADS (515.678044375)
+robot.distanceHard()
+robot.rotationHard()
 
-# robot.setTickRatio(25500,4356);
-robot.setTickRatio(27793,3990);
 robot.setTicks(0,0)
 robot.setX(0)
 robot.setY(0)
 robot.setAngle(0)
+robot.setTickRatio(27800,4350);
 
-
-robot.distanceHard()
-robot.rotationHard()
-robot.rotate(10*2*pi,timeout=120)
+robot.rotateTo(1*pi)
+robot.rotateTo(0*pi)
+# robot.rotate(1*2*pi,timeout=120)
 sleep(5)
 robot.distanceSoft()
 robot.rotationSoft()

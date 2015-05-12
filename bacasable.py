@@ -24,6 +24,11 @@ robot.setX(0)
 robot.setY(0)
 robot.setAngle(0)
 
+
+# robot.setX(1000)
+# robot.setY(1000)
+# while True:
+	# print(robot.checkObstacle())
 # # while True :
 # robot.openFrontGrip()
 # sleep(1)
@@ -35,14 +40,14 @@ robot.setAngle(0)
 # robot.closeBackGrip()
 # sleep(1)
 
-# robot.openBallGrip()
-# sleep(1)
-# robot.closeBallGrip()
+robot.openBallGrip()
+sleep(1)
+robot.closeBallGrip()
 
 # robot.goto(30, 0, end_angle = 0)
 # robot.goto(0, 0, end_angle = 0)
-robot.moveBackwardUntilblockage()
-robot.emergencyStop()
+# robot.moveBackwardUntilblockage()
+# robot.emergencyStop()
  # robot.moveBackward(400)
 # robot.rotateTo(pi)
 # sleep(2)

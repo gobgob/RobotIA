@@ -1,14 +1,11 @@
 #!/usr/bin/python3
 
-# from class_highway import *<
-from class_point import *
 from class_robot import *
 from class_table import *
 from math import *
 from math import *
 from proxi_serial import *
 from time import sleep
-import random
 import threading
 
 table = Table();
@@ -22,8 +19,6 @@ robot.setTicks(0,0)
 robot.setX(0)
 robot.setY(0)
 robot.setAngle(0)
-
-
 robot.setTickRatio(27800,4350);
 
 # robot.goto(300,0,pi/2)

@@ -15,12 +15,12 @@ SERVO_FRONT_GRIP_CLOSE = 90
 SERVO_FRONT_GRIP_OPEN = 0
 
 SERVO_BACK_GRIP_PIN = 21
-SERVO_BACK_GRIP_CLOSE = 170
+SERVO_BACK_GRIP_CLOSE = 180
 SERVO_BACK_GRIP_OPEN = 70
 
 SERVO_BALL_GRIP_PIN = 20
 SERVO_BALL_GRIP_CLOSE = 150
-SERVO_BALL_GRIP_OPEN = 30
+SERVO_BALL_GRIP_OPEN = 100
 
 SERVO_LEFT_ARM_PIN  = 16
 SERVO_RIGHT_ARM_PIN = 17
@@ -132,7 +132,7 @@ class Robot:
 			self.proxy.rotate(colorize_angle(angle),False)
 		else:
 			self.proxy.rotate(angle,False)
-		self.waitForEvent(returnOnBlock=True,timeout=timeout,noWait=noWait);
+		self.waitForEvent(returnOnBlock=False,timeout=timeout,noWait=noWait);
 
 	def rotateTo(self,angle,autocolor=False,noWait=False):
 		print ("rotateTo " +str(angle)+ "("+str((angle/pi)*180)+")"+" noWait="+str(noWait))
@@ -158,7 +158,7 @@ class Robot:
 			except Obstacle as e:
 				count+=1
 				# self.setBras(100,100)
-				# sleep(2)
+				sleep(2)
 				# self.setBras(0,0)
 
 		if (count>=5):
@@ -370,9 +370,32 @@ class Robot:
 			self.flag_endOfGame=False
 			raise EndOfGame()
 
+	# def checkObstacle(self):
+	# 	distmin=2
+	# 	distblock=20
+
+	# 	self.checkEndOfGame()
+	# 	# return False
+	# 	dist = self.getUltrasounds()
+	# 	if dist>distmin and dist <distblock:
+	# 		dist=0.0
+	# 		for i in range(0,10):
+	# 			dist=dist+self.getUltrasounds()/10.0
+	# 			sleep(0.001)
+	# 		print ("debug "+str(dist))
+	# 		if dist>distmin and dist <distblock:
+	# 			self.getPosition()
+	# 			x=self.x+(dist+self.height/2)*cos(self.angle)
+	# 			y=self.y+(dist+self.height/2)*sin(self.angle)
+	# 			obstacle=Point(x,y)
+	# 			if self.table.isInTable(obstacle) :
+	# 				print ("Obstacle "+str(dist)+" "+str(x)+" "+str(y))
+	# 				return True
+	# 	return False
+
 	def checkObstacle(self):
-		distmin=2
-		distblock=20
+		distmin=0
+		distblock=250
 
 		self.checkEndOfGame()
 		# return False
@@ -382,7 +405,6 @@ class Robot:
 			for i in range(0,10):
 				dist=dist+self.getUltrasounds()/10.0
 				sleep(0.001)
-			print ("debug "+str(dist))
 			if dist>distmin and dist <distblock:
 				self.getPosition()
 				x=self.x+(dist+self.height/2)*cos(self.angle)
@@ -400,7 +422,7 @@ class Robot:
 		self.setRotCoeffs(100,0)
 
 	def rotationHard(self):
-		self.setRotCoeffs(150,10000)
+		self.setRotCoeffs(180,20000)
 
 	def rotationVeryHard(self):
 		self.setRotCoeffs(100,0)
@@ -412,7 +434,7 @@ class Robot:
 		self.setDistCoeffs(40,30000)
 
 	def distanceHard(self):
-		self.setDistCoeffs(100,10000)
+		self.setDistCoeffs(110,10000)
 
 	def distanceVeryHard(self):
 		self.setDistCoeffs(120,0)

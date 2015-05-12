@@ -20,7 +20,7 @@ SERVO_BACK_GRIP_OPEN = 70
 
 SERVO_BALL_GRIP_PIN = 20
 SERVO_BALL_GRIP_CLOSE = 150
-SERVO_BALL_GRIP_OPEN = 100
+SERVO_BALL_GRIP_OPEN = 50
 
 SERVO_LEFT_ARM_PIN  = 16
 SERVO_RIGHT_ARM_PIN = 17
@@ -181,7 +181,7 @@ class Robot:
 			if rotateOnly:
 				return
 
-		self.gotoEx(x,y,20)
+		self.gotoEx(x,y,10)
 		
 		if not end_angle is None:
 			sleep(0.5)
@@ -336,8 +336,8 @@ class Robot:
 
 		while True :
 			res,bfr,bfl,bbr,bbl,cmdhack = self.proxy.getStatus()
-			print ("res "+str(res)+" ack " + str(cmdhack))
-			print ("bfr="+str(bfr)+" bfl="+str(bfl)+" bbr="+str(bbr)+" bbl="+str(bbl))
+			# print ("res "+str(res)+" ack " + str(cmdhack))
+			# print ("bfr="+str(bfr)+" bfl="+str(bfl)+" bbr="+str(bbr)+" bbl="+str(bbl))
 			self.checkEndOfGame()
 
 			# self.getPosition()
@@ -360,6 +360,7 @@ class Robot:
 				self.blockageBackRight=bbr
 				self.blockageBackLeft=bbl
 				if returnOnBlock and (bfr or bfl or bbr or bbl):
+					print("BLOCAGE\n")
 					return False
 				if cmdhack:
 					return True
@@ -422,7 +423,7 @@ class Robot:
 		self.setRotCoeffs(100,0)
 
 	def rotationHard(self):
-		self.setRotCoeffs(180,20000)
+		self.setRotCoeffs(250,20000)
 
 	def rotationVeryHard(self):
 		self.setRotCoeffs(100,0)
@@ -434,7 +435,7 @@ class Robot:
 		self.setDistCoeffs(40,30000)
 
 	def distanceHard(self):
-		self.setDistCoeffs(110,10000)
+		self.setDistCoeffs(120,12000)
 
 	def distanceVeryHard(self):
 		self.setDistCoeffs(120,0)

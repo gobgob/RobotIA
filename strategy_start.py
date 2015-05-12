@@ -58,7 +58,7 @@ class StrategyStart(Strategy):
 			robot.openBackGrip()
 			robot.openBallGrip()
 			sleep(1)
-			robot.moveForward(200)
+			robot.moveForward(80)
 			robot.rotateTo(-pi/2, autocolor=True)
 
 

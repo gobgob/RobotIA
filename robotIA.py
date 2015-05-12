@@ -5,6 +5,7 @@ from class_table import *
 from math import *
 from proxi_serial import *
 from strategy_start import *
+from strategy_clap import *
 from time import sleep
 import threading
 
@@ -13,6 +14,7 @@ proxy = Proxy_serial()
 robot = Robot(table,proxy);
 
 strategyStart=StrategyStart(robot)
+strategyClap=StrategyClap(robot)
 
 def doStrategy( fun, *args ):
 	try:
@@ -24,6 +26,7 @@ def match():
 	while True:
 		try:
 			doStrategy(strategyStart.run);
+			#doStrategy(strategyClap.run);
 			robot.checkEndOfGame()
 			sleep(1)
 		except EndOfGame as e:
@@ -38,18 +41,10 @@ def funny():
 threadMatch = threading.Thread(None, match)
 threadFunny = threading.Thread(None, funny)
 
-robot.setTicks(0,0)
-robot.setX(0)
-robot.setY(0)
-robot.setAngle(0)
-robot.setX(500)
 
-# robot appuyé contre tasseau posé sur bordure salle de cinéma
-robot.setY(colorize_y(1500-400-90-30))
-#au milieu
-robot.setX(1000)
-#regarde vers l'autre coté de la table
-robot.setAngle(colorize_angle((pi/180)*(-90)))
+robot.distanceSoft()
+robot.rotationSoft()
+
 
 robot.setBras(100,100)
 robot.openFrontGrip()
@@ -58,18 +53,27 @@ robot.closeBallGrip()
 
 print("Waiting for Jumper")
 
-# while not robot.isJumperIn():
-# 	pass
+while not robot.isJumperIn():
+	pass
 
 robot.setBras(0,0)
 print("The Jumper is in.")
 sleep(1)
 
 
-# while robot.isJumperIn():
-# 	pass
 
-robot.setBras(0,0)
+
+
+# robot appuyé contre tasseau posé sur bordure salle de cinéma
+robot.setTicks(0,0)
+robot.setY(colorize_y(1500-400-90-30))
+#au milieu
+robot.setX(1000)
+#regarde vers l'autre coté de la table
+robot.setAngle(colorize_angle((pi/180)*(-90)))
+
+while robot.isJumperIn():
+	pass
 print("The Jumper is out.")
 
 sleep(0.5)

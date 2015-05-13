@@ -40,9 +40,14 @@ robot.setAngle(0)
 # robot.closeBackGrip()
 # sleep(1)
 
-robot.openBallGrip()
+# robot.openBallGrip()
+# sleep(1)
+# robot.closeBallGrip()
+
+
+robot.setBras(0,0)
 sleep(1)
-robot.closeBallGrip()
+robot.setBras(100,100)
 
 # robot.goto(30, 0, end_angle = 0)
 # robot.goto(0, 0, end_angle = 0)

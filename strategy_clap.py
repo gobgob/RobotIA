@@ -43,7 +43,15 @@ class StrategyClap(Strategy):
 
 			robot.goto(1620,1255,0, autocolor=True)
 			robot.closeFrontGrip()
-			# robot.goto(1885,1635,0, autocolor=True)
+			sleep(3)
+			robot.goto(1495,885, autocolor=True)
+			robot.goto(1070,995,pi, autocolor=True)
+			robot.openFrontGrip()
+			robot.moveBackward(200)
+
+
+			robot.goto(1760,420, autocolor=True)
+			robot.moveBackward(200)
 
 			print(robot.getX())
 			print(robot.getY())

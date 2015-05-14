@@ -35,6 +35,7 @@ def match():
 			return
 
 def funny():
+	robot.emergencyStop()
 	print("funny !")
 	exit()
 

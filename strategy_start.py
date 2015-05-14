@@ -26,7 +26,7 @@ class StrategyStart(Strategy):
 			robot.activateUltrasounds()
 
 			#go take the 1st cup
-			robot.goto(table.cups[0].x+60, table.cups[0].y+120, autocolor=True)
+			robot.goto(table.cups[0].x+70, table.cups[0].y+130, autocolor=True)
 			# sleep(2)
 
 			robot.closeFrontGrip()

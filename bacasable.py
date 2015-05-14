@@ -30,24 +30,23 @@ robot.setAngle(0)
 # while True:
 	# print(robot.checkObstacle())
 # # while True :
-# robot.openFrontGrip()
-# sleep(1)
-# robot.closeFrontGrip()
-# sleep(1)
+robot.openFrontGrip()
+sleep(1)
+robot.closeFrontGrip()
+sleep(1)
 
-# robot.openBackGrip()
-# sleep(1)
-# robot.closeBackGrip()
-# sleep(1)
+robot.openBackGrip()
+sleep(1)
+robot.closeBackGrip()
+sleep(1)
 
-# robot.openBallGrip()
-# sleep(1)
-# robot.closeBallGrip()
-
+robot.openBallGrip()
+sleep(1)
+robot.closeBallGrip()
 
 robot.setBras(0,0)
 sleep(1)
-robot.setBras(100,100)
+robot.setBras(50,50)
 
 # robot.goto(30, 0, end_angle = 0)
 # robot.goto(0, 0, end_angle = 0)

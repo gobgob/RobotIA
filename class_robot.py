@@ -8,6 +8,7 @@ from class_table import *
 from color import *
 import RPi.GPIO as GPIO
 
+# from class_eyes import *
 
 
 SERVO_FRONT_GRIP_PIN = 16
@@ -25,11 +26,11 @@ SERVO_BALL_GRIP_OPEN = 50
 SERVO_LEFT_ARM_PIN  = 14
 SERVO_RIGHT_ARM_PIN = 15
 
-SERVO_LEFT_ARM_HIGH = 30
-SERVO_LEFT_ARM_LOW  = 100
+SERVO_LEFT_ARM_HIGH = 40
+SERVO_LEFT_ARM_LOW  = 90
 
-SERVO_RIGHT_ARM_HIGH = 30
-SERVO_RIGHT_ARM_LOW = 100
+SERVO_RIGHT_ARM_HIGH = 40
+SERVO_RIGHT_ARM_LOW = 90
 
 class Robot:
 	"""The robot class !"""
@@ -70,6 +71,7 @@ class Robot:
 		GPIO.setmode(GPIO.BCM)
 		GPIO.setup(self.gpio_jumper, GPIO.IN)
 		self.setTickRatio(27800,4350);
+		# eyes = Eyes()
 
 	def openFrontGrip(self):
 		print("openFrontGrip")
@@ -140,7 +142,7 @@ class Robot:
 			self.proxy.rotate(colorize_angle(angle),True)
 		else:
 			self.proxy.rotate(angle,True)
-		self.waitForEvent(returnOnBlock=True,timeout=10,noWait=noWait);
+		self.waitForEvent(returnOnBlock=True,timeout=5,noWait=noWait);
 
 
 	def gotoEx(self,x,y,delta_max=10): #handle US
@@ -149,7 +151,7 @@ class Robot:
 		while count<5 :
 			try:
 				self.proxy.goto(x,y,delta_max)
-				if (self.waitForEvent(returnOnBlock=True,exceptOnUltrasouds=True)):
+				if (self.waitForEvent(returnOnBlock=True,exceptOnUltrasouds=True, timeout=5)):
 					break
 				else:
 					print ("jammed")
@@ -157,9 +159,9 @@ class Robot:
 					self.unblock()
 			except Obstacle as e:
 				count+=1
-				# self.setBras(100,100)
+				self.setBras(100,100)
 				sleep(2)
-				# self.setBras(0,0)
+				self.setBras(0,0)
 
 		if (count>=5):
 			raise Obstacle()
@@ -181,7 +183,7 @@ class Robot:
 			if rotateOnly:
 				return
 
-		self.gotoEx(x,y,10)
+		self.gotoEx(x,y,15)
 		
 		if not end_angle is None:
 			sleep(0.5)
@@ -423,7 +425,7 @@ class Robot:
 		self.setRotCoeffs(100,0)
 
 	def rotationHard(self):
-		self.setRotCoeffs(250,20000)
+		self.setRotCoeffs(300,20000)
 
 	def rotationVeryHard(self):
 		self.setRotCoeffs(100,0)

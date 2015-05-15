@@ -24,6 +24,18 @@ robot.setX(0)
 robot.setY(0)
 robot.setAngle(0)
 
+
+
+# robot.closeBackGrip()
+# robot.closeBallGrip()
+# sleep (4)
+# robot.openBallGrip()
+# robot.openBackGrip()
+
+
+# robot.moveForward(50)
+# robot.closeFrontGrip()
+
 # robot.getRotCoeffs()
 
 # robot.distanceVeryHard()
@@ -45,14 +57,14 @@ sleep(1)
 robot.closeFrontGrip()
 sleep(1)
 
-# robot.openBackGrip()
-# sleep(1)
-# robot.closeBackGrip()
-# sleep(1)
+robot.openBackGrip()
+sleep(1)
+robot.closeBackGrip()
+sleep(1)
 
-# robot.openBallGrip()
-# sleep(1)
-# robot.closeBallGrip()
+robot.openBallGrip()
+sleep(1)
+# robot.closeBa<llGrip()
 
 # robot.setBras(0,0)
 # sleep(1)

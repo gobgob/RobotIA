@@ -43,17 +43,18 @@ class StrategyStart(Strategy):
 			# robot.distanceHard()
 
 
-			robot.goto(1140,605,0, autocolor=True)
+			robot.goto(1040,605,0, autocolor=True)
 			robot.deactivateUltrasounds()
 			robot.rotateTo(-pi/3, autocolor=True)
 			robot.rotateTo(-pi/2, autocolor=True)
 			robot.rotateTo(-pi, autocolor=True)
 			robot.distanceSoft()
-			robot.moveBackward(200)
-			robot.distanceHard()
+			robot.moveBackward(300)
+			# robot.distanceHard()
 			robot.closeBackGrip()
+			robot.moveBackward(250)
 			sleep(1)
-
+			sleep(20)
 
 			robot.activateUltrasounds()
 			robot.goto(1000, 800, pi/2, autocolor=True)
@@ -63,6 +64,7 @@ class StrategyStart(Strategy):
 			sleep(1)
 			robot.moveBackward(200)
 			robot.rotateTo(-pi/2, autocolor=True)
+			robot.moveForward(80)
 			sleep(1)
 
 			robot.openBallGrip()
@@ -70,7 +72,7 @@ class StrategyStart(Strategy):
 			robot.openBackGrip()
 			
 			sleep(1)
-			robot.moveForward(80)
+			robot.moveForward(140)
 			robot.rotateTo(-pi/2, autocolor=True)
 
 

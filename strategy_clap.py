@@ -51,7 +51,7 @@ class StrategyClap(Strategy):
 
 
 			robot.goto(1760,420, autocolor=True)
-			robot.moveBackward(200)
+			robot.moveBackward(250)
 
 			print(robot.getX())
 			print(robot.getY())

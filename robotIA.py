@@ -5,7 +5,7 @@ from class_table import *
 from math import *
 from proxi_serial import *
 from strategy_start import *
-from strategy_clap import *
+from strategy_bis import *
 from time import sleep
 import threading
 
@@ -14,7 +14,7 @@ proxy = Proxy_serial()
 robot = Robot(table,proxy);
 
 strategyStart=StrategyStart(robot)
-strategyClap=StrategyClap(robot)
+strategyBis=StrategyBis(robot)
 
 def doStrategy( fun, *args ):
 	try:
@@ -26,7 +26,7 @@ def match():
 	while True:
 		try:
 			doStrategy(strategyStart.run);
-			#doStrategy(strategyClap.run);
+			doStrategy(strategyBis.run);
 			robot.checkEndOfGame()
 			sleep(1)
 		except EndOfGame as e:
@@ -67,7 +67,7 @@ sleep(1)
 
 # robot appuyé contre tasseau posé sur bordure salle de cinéma
 robot.setTicks(0,0)
-robot.setY(colorize_y(1500-400-90-30))
+robot.setY(colorize_y(1500-400-90))
 #au milieu
 robot.setX(1000)
 #regarde vers l'autre coté de la table

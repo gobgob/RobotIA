@@ -16,7 +16,7 @@ SERVO_FRONT_GRIP_CLOSE = 80
 SERVO_FRONT_GRIP_OPEN = 0
 
 SERVO_BACK_GRIP_PIN = 21
-SERVO_BACK_GRIP_CLOSE = 180
+SERVO_BACK_GRIP_CLOSE = 170
 SERVO_BACK_GRIP_OPEN = 70
 
 SERVO_BALL_GRIP_PIN = 20
@@ -91,7 +91,9 @@ class Robot:
 
 	def openBallGrip(self):
 		print("openBallGrip")
-		self.proxy.setServo(SERVO_BALL_GRIP_PIN, SERVO_BALL_GRIP_OPEN)
+		for i in range(1,10):
+			self.proxy.setServo(SERVO_BALL_GRIP_PIN, SERVO_BALL_GRIP_CLOSE+(SERVO_BALL_GRIP_OPEN-SERVO_BALL_GRIP_CLOSE)*i/10)
+			sleep(0.2)
 
 	def closeBallGrip(self):
 		print("closeBallGrip")
@@ -361,9 +363,9 @@ class Robot:
 				self.blockageFrontLeft=bfl
 				self.blockageBackRight=bbr
 				self.blockageBackLeft=bbl
-				if returnOnBlock and (bfr or bfl or bbr or bbl):
-					print("BLOCAGE\n")
-					return False
+				# if returnOnBlock and (bfr or bfl or bbr or bbl):
+				# 	print("BLOCAGE\n")
+				# 	return False
 				if cmdhack:
 					return True
 			time.sleep(0.02);

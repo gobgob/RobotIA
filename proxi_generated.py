@@ -19,6 +19,7 @@ class GeneratedProxy():
 		"REG_SETSERVO":14,
 		"REG_SETTICKRATIO":15,
 		"REG_SETMAXSPEEDS":16,
+		"REG_GETMAXSPEEDS":17,
 	}
 	
 	def move(self,rel_dist,sign):
@@ -128,5 +129,12 @@ class GeneratedProxy():
 		vals.extend(split_uinteger_32(new_rot_speed))
 		vals.extend(split_uinteger_32(new_dist_speed))
 		self.writeBlock(self.i2c_registers['REG_SETMAXSPEEDS'],vals)
+	
+	def getMaxSpeeds(self,):
+		vals=self.readBlock(self.i2c_registers['REG_GETMAXSPEEDS'],8)
+		res=0
+		rot_speed=make_uinteger_32(vals,0)
+		dist_speed=make_uinteger_32(vals,4)
+		return res,rot_speed,dist_speed
 	
 	

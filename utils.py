@@ -28,6 +28,9 @@ def split_uinteger_32(x):
 def make_integer_32(vals,offset):
 	return struct.unpack('>i', bytes(vals[offset:offset+4]))[0]
 
+def make_uinteger_32(vals,offset):
+	return struct.unpack('>I', bytes(vals[offset:offset+4]))[0]
+
 # def split_integer_16(x):
 # 	splitted = []
 # 	splitted.append(0xFF&(x>>8))

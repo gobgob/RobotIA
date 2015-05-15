@@ -13,6 +13,7 @@ class StrategyStart(Strategy):
 			robot=self.robot
 			table=self.table
 
+			robot.goFast()
 			robot.distanceHard()
 			robot.rotationHard()
 
@@ -26,14 +27,23 @@ class StrategyStart(Strategy):
 			robot.activateUltrasounds()
 
 			#go take the 1st cup
-			robot.goto(table.cups[0].x+70, table.cups[0].y+130, autocolor=True)
+
+			robot.distanceVeryHard()
+			robot.goSlow()
+			robot.goto(table.cups[0].x+10, table.cups[0].y+90, autocolor=True)
 			# sleep(2)
+
+
 
 			robot.closeFrontGrip()
 			table.cups[0].isAvailable = False
 			sleep(1)
 
-			robot.goto(1140,645,0, autocolor=True)
+			# robot.goFast()
+			# robot.distanceHard()
+
+
+			robot.goto(1140,605,0, autocolor=True)
 			robot.deactivateUltrasounds()
 			robot.rotateTo(-pi/3, autocolor=True)
 			robot.rotateTo(-pi/2, autocolor=True)
@@ -55,8 +65,10 @@ class StrategyStart(Strategy):
 			robot.rotateTo(-pi/2, autocolor=True)
 			sleep(1)
 
-			robot.openBackGrip()
 			robot.openBallGrip()
+			sleep(1)
+			robot.openBackGrip()
+			
 			sleep(1)
 			robot.moveForward(80)
 			robot.rotateTo(-pi/2, autocolor=True)

@@ -12,7 +12,7 @@ import RPi.GPIO as GPIO
 
 
 SERVO_FRONT_GRIP_PIN = 16
-SERVO_FRONT_GRIP_CLOSE = 90
+SERVO_FRONT_GRIP_CLOSE = 80
 SERVO_FRONT_GRIP_OPEN = 0
 
 SERVO_BACK_GRIP_PIN = 21
@@ -20,8 +20,8 @@ SERVO_BACK_GRIP_CLOSE = 180
 SERVO_BACK_GRIP_OPEN = 70
 
 SERVO_BALL_GRIP_PIN = 20
-SERVO_BALL_GRIP_CLOSE = 150
-SERVO_BALL_GRIP_OPEN = 50
+SERVO_BALL_GRIP_CLOSE = 40
+SERVO_BALL_GRIP_OPEN = 0
 
 SERVO_LEFT_ARM_PIN  = 14
 SERVO_RIGHT_ARM_PIN = 15
@@ -440,4 +440,14 @@ class Robot:
 		self.setDistCoeffs(120,12000)
 
 	def distanceVeryHard(self):
-		self.setDistCoeffs(120,0)
+		self.setDistCoeffs(300,12000)
+
+
+	def dumpSpeed(self):
+		print(self.proxy.getMaxSpeeds())
+
+	def goSlow(self):
+		self.proxy.setMaxSpeeds(90000,50000)
+
+	def goFast(self):
+		self.proxy.setMaxSpeeds(90000,90000)

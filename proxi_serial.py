@@ -139,3 +139,8 @@ class Proxy_serial(GeneratedProxy):
 # @type setter
 # @param uinteger 32 new_rot_speed
 # @param uinteger 32 new_dist_speed
+
+# @method getMaxSpeeds
+# @type getter
+# @param uinteger 32 rot_speed
+# @param uinteger 32 dist_speed
